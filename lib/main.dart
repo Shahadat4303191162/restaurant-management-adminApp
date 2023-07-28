@@ -1,13 +1,25 @@
+import 'dart:js';
+
+import 'package:cafe_admin/page/category_page.dart';
 import 'package:cafe_admin/page/dashbord_page.dart';
 import 'package:cafe_admin/page/launcher_page.dart';
 import 'package:cafe_admin/page/login_page.dart';
+import 'package:cafe_admin/page/order_list_page.dart';
+import 'package:cafe_admin/page/product_page.dart';
+import 'package:cafe_admin/page/sales_page.dart';
+import 'package:cafe_admin/page/settings_page.dart';
+import 'package:cafe_admin/provider/product_provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  runApp(const MyApp());
+  runApp(MultiProvider(providers:[
+    ChangeNotifierProvider(create: (context) => ProductProvider()),
+  ],
+      child: const MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -25,8 +37,14 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: LauncherPage.routeName,
       routes: {
+        LauncherPage.routeName: (_) => LauncherPage(),
         LoginPage.routeName: (_) => LoginPage(),
         DashboardPage.routeName:(_) => DashboardPage(),
+        ProductPage.routeName: (_) => ProductPage(),
+        CategoryPage.routeName: (_) => CategoryPage(),
+        SettingsPage.routeName: (_) => SettingsPage(),
+        OrderPage.routeName: (_) => OrderPage(),
+        SalesPage.routeName: (_) => SalesPage(),
       },
     );
   }

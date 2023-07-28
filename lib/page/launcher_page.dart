@@ -4,7 +4,7 @@ import 'package:cafe_admin/page/login_page.dart';
 import 'package:flutter/material.dart';
 
 class LauncherPage extends StatefulWidget {
-  static const String routeName ='/launcher';
+  static const String routeName = '/launcher';
   const LauncherPage({super.key});
 
   @override
@@ -16,10 +16,12 @@ class _LauncherPageState extends State<LauncherPage> {
   @override
   void initState() {
     Future.delayed(Duration.zero,(){
-      if(AuthService.user == null){
-        Navigator.pushReplacementNamed(context, LoginPage.routeName);
-      }else{
+      if(AuthService.user != null){
+        print(' next page show');
         Navigator.pushReplacementNamed(context, DashboardPage.routeName);
+      }else{
+        print('user null paici');
+        Navigator.pushReplacementNamed(context, LoginPage.routeName);
       }
     });
     super.initState();
@@ -27,7 +29,7 @@ class _LauncherPageState extends State<LauncherPage> {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return  const Scaffold(
       body: Center(child: CircularProgressIndicator(),),
     );
   }

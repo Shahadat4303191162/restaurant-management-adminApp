@@ -12,10 +12,11 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final formKey = GlobalKey<FormState>();
+
   final emailController = TextEditingController();
   final passController = TextEditingController();
   bool isObscureText = true;
+  final formKey = GlobalKey<FormState>();
   String errMsg = '';
 
   @override
@@ -34,15 +35,20 @@ class _LoginPageState extends State<LoginPage> {
         child: Form(
           key: formKey,
           child: ListView(
-            padding: EdgeInsets.symmetric(vertical: screenHeight*0.3,horizontal:screenWidth*0.1 ),
+            padding: EdgeInsets.symmetric(vertical: screenHeight*0.4,horizontal:screenWidth*0.1 ),
             children: [
               TextFormField(
                 controller: emailController,
                 decoration: InputDecoration(
                   hintText: 'Email Address',
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide( width: 1,color: Theme.of(context).primaryColor),
+                    borderRadius: BorderRadius.circular(50.0),
+                  ),
                   prefixIcon: Icon(Icons.email,
                   color: Theme.of(context).primaryColor,),
                   filled: true,
+                  fillColor: Colors.transparent,
                 ),
                 validator: (value){
                   if(value == null || value.isEmpty){
@@ -53,9 +59,14 @@ class _LoginPageState extends State<LoginPage> {
               ),
               const SizedBox(height: 10,),
               TextFormField(
+                obscureText: isObscureText,
                 controller: passController,
                 decoration: InputDecoration(
                   hintText: 'Password',
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide( width: 1,color: Theme.of(context).primaryColor),
+                    borderRadius: BorderRadius.circular(50.0),
+                  ),
                   prefixIcon: Icon(Icons.lock,
                   color: Theme.of(context).primaryColor,),
                   suffixIcon: IconButton(
@@ -67,6 +78,7 @@ class _LoginPageState extends State<LoginPage> {
                     },
                   ),
                   filled: true,
+                  fillColor: Colors.transparent,
                 ),
                 validator: (value){
                   if(value == null || value.isEmpty){
@@ -103,18 +115,30 @@ class _LoginPageState extends State<LoginPage> {
 
   void authenticate() async{
     if(formKey.currentState!.validate()){
+
+      // try{
+      //   AuthService.login(emailController.text, passController.text).then((login) =>
+      //       Navigator.pushReplacementNamed(context, LauncherPage.routeName));
+      //
+      //     //Navigator.pushReplacementNamed(context, LauncherPage.routeName);
+      //
+      // }
       try{
         final status = await AuthService.login(emailController.text, passController.text);
         if(status){
+          print('mounted e jai kaj atke geche');
           if(!mounted)return;
+          print('all ok');
           Navigator.pushReplacementNamed(context, LauncherPage.routeName);
+          print('Launcher page e pathanu holo');
         }else{
           await AuthService.logOut();
           setState(() {
             errMsg = 'This Email does not belong to an admin account';
           });
         }
-      } on FirebaseAuthException catch(e){
+      }
+       on FirebaseAuthException catch(e){
         setState(() {
           errMsg = e.message!;
         });
