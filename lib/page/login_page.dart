@@ -62,7 +62,7 @@ class _LoginPageState extends State<LoginPage> {
                 obscureText: isObscureText,
                 controller: passController,
                 decoration: InputDecoration(
-                  hintText: 'Password',
+                  hintText: 'Password',//68didar524
                   enabledBorder: OutlineInputBorder(
                     borderSide: BorderSide( width: 1,color: Theme.of(context).primaryColor),
                     borderRadius: BorderRadius.circular(50.0),

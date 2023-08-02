@@ -7,6 +7,9 @@ import 'package:cafe_admin/page/sales_page.dart';
 import 'package:cafe_admin/page/settings_page.dart';
 import 'package:cafe_admin/widgets/dashboard_item_view.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../provider/product_provider.dart';
 
 class DashboardPage extends StatelessWidget {
   static const String routeName = '/dashboard';
@@ -14,6 +17,7 @@ class DashboardPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Provider.of<ProductProvider>(context, listen: false).getAllCategories();
     return Scaffold(
       appBar: AppBar(
         title: const Text('Dash board'),
