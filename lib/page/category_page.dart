@@ -1,8 +1,8 @@
-import 'dart:io';
 
 import 'package:cafe_admin/models/category_model.dart';
 import 'package:cafe_admin/provider/product_provider.dart';
 import 'package:cafe_admin/utils/helper_function.dart';
+//import 'package:cafe_admin/utils/helper_function.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
@@ -36,7 +36,7 @@ class _CategoryPageState extends State<CategoryPage> {
       ),
       body: Consumer<ProductProvider>(
         builder: (context, provider, _) =>
-        provider.categoryList.isEmpty ?
+         provider.categoryList.isEmpty ?
         const Center(
           child: Text('NO item found',
             style: TextStyle(fontSize: 18),
@@ -44,13 +44,16 @@ class _CategoryPageState extends State<CategoryPage> {
         )
             : ListView.builder(
           itemCount: provider.categoryList.length,
-          itemBuilder: (BuildContext context, int index) {
+          itemBuilder: (context, index) {
             final category = provider.categoryList[index];
-            return ListTile(
-              // leading: CircleAvatar(
-              //   backgroundImage: NetworkImage(category.imageUrl!),
-              // ),
-              title: Text('${category.name} (${category.productCount})',style: TextStyle(color: Colors.blue),),
+            return Card(
+              elevation: 5,
+              child: ListTile(
+                leading: CircleAvatar(
+                  backgroundImage: NetworkImage(category.imageUrl!),
+                ),
+                title: Text('${category.name} (${category.productCount})',style: TextStyle(color: Colors.blue),),
+              ),
             );
 
           },
@@ -59,9 +62,11 @@ class _CategoryPageState extends State<CategoryPage> {
       ),
 
       bottomSheet: DraggableScrollableSheet(
+
         initialChildSize: 0.05,
         minChildSize: 0.05,
         maxChildSize: 0.5,
+        expand: false,
         builder: (BuildContext context, ScrollController scrollController) {
           return Card(
             color: Colors.purple.shade100,
@@ -70,7 +75,7 @@ class _CategoryPageState extends State<CategoryPage> {
               controller: scrollController,
               children: [
                 const Center(
-                  child: Icon(Icons.keyboard_double_arrow_up),
+                  child: Icon(Icons.drag_handle),
                 ),
                 const ListTile(
                   title: Text('ADD CATEGORY'),
@@ -79,10 +84,11 @@ class _CategoryPageState extends State<CategoryPage> {
                   controller: namController,
                   decoration: const InputDecoration(
                     hintText: 'Enter new Category',
+                    fillColor: Colors.white,
                     filled: true,
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 Center(
@@ -92,7 +98,7 @@ class _CategoryPageState extends State<CategoryPage> {
                       padding: EdgeInsets.all(0.0),
                       child: _imageUrl == null
                       ? isUploading ?
-                      Center(child: CircularProgressIndicator(),) :
+                      const Center(child: CircularProgressIndicator(),) :
                       Image.asset(
                         'images/placeholder.jpg',
                         height: 100,
@@ -122,7 +128,7 @@ class _CategoryPageState extends State<CategoryPage> {
                           _imageSource = ImageSource.camera;
                           _getImage();
                         }, child: const Text('Camera'),),
-                    SizedBox(
+                    const SizedBox(
                       width: 20,
                     ),
                     ElevatedButton(
@@ -133,15 +139,16 @@ class _CategoryPageState extends State<CategoryPage> {
                   ],
                 ),
                 const SizedBox(
-                  height: 20,
+                  height: 10,
                 ),
                 ElevatedButton(
                     onPressed: () async{
                       if(_imageUrl == null || namController.text.isEmpty){
                         return;
-                      } else{
+                      }
+                      else{
                         final categoryModel = CategoryModel(
-                          name: namController.text,
+                          name: namController.text.capitalize(),
                           imageUrl: _imageUrl,
                         );
                         Provider
