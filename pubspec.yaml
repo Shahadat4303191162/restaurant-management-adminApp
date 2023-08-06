@@ -42,6 +42,8 @@ dependencies:
   provider:
   intl:
   image_picker:
+  flutter_easyloading:
+  connectivity_plus:
 
 dev_dependencies:
   flutter_test:

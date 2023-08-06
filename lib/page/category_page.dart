@@ -62,7 +62,6 @@ class _CategoryPageState extends State<CategoryPage> {
       ),
 
       bottomSheet: DraggableScrollableSheet(
-
         initialChildSize: 0.05,
         minChildSize: 0.05,
         maxChildSize: 0.5,
