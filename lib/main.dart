@@ -11,6 +11,7 @@ import 'package:cafe_admin/page/settings_page.dart';
 import 'package:cafe_admin/provider/product_provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:provider/provider.dart';
 
 void main() async{
@@ -35,6 +36,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
+      builder: EasyLoading.init(),
       initialRoute: LauncherPage.routeName,
       routes: {
         LauncherPage.routeName: (_) => LauncherPage(),

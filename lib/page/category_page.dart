@@ -4,6 +4,7 @@ import 'package:cafe_admin/provider/product_provider.dart';
 import 'package:cafe_admin/utils/helper_function.dart';
 //import 'package:cafe_admin/utils/helper_function.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
@@ -141,26 +142,9 @@ class _CategoryPageState extends State<CategoryPage> {
                   height: 10,
                 ),
                 ElevatedButton(
-                    onPressed: () async{
-                      if(_imageUrl == null || namController.text.isEmpty){
-                        return;
-                      }
-                      else{
-                        final categoryModel = CategoryModel(
-                          name: namController.text.capitalize(),
-                          imageUrl: _imageUrl,
-                        );
-                        Provider
-                            .of<ProductProvider>(context,listen: false)
-                            .addCategory(categoryModel).then((value) {
-                              setState(() {
-                                namController.clear();
-                                _imageUrl = null;
-                              });
-                        });
-                      }
-                    },
-                    child: const Text('ADD'))
+                    onPressed: isUploading ? null :_onSave,
+                    child: Text('ADD')
+                ),
               ],
             ),
           );
@@ -187,4 +171,52 @@ class _CategoryPageState extends State<CategoryPage> {
       }
     }
   }
+
+  void _onSave() async{
+    if(_imageUrl == null || namController.text.isEmpty){
+      return;
+    }
+    else{
+      final categoryModel = CategoryModel(
+        name: namController.text.capitalize(),
+        imageUrl: _imageUrl,
+      );
+      final provider = Provider.of<ProductProvider>(context,listen: false);
+      List<CategoryModel> existingCategories = provider.categoryList;
+
+      bool isNameRepeated = existingCategories.any((category) =>
+      category.name! == categoryModel.name!.capitalize()
+      );
+      if (isNameRepeated) {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Text('Name Repeated'),
+              content: const Text('Category name already exists.'),
+              actions: [
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text('OK'),
+                ),
+              ],
+            );
+          },
+        );
+      }else{
+        EasyLoading.show(status: 'please Wait....',
+            dismissOnTap: false);
+        provider.addCategory(categoryModel).then((value) {
+          EasyLoading.dismiss();
+          setState(() {
+            namController.clear();
+            _imageUrl = null;
+          });
+        });
+      }
+    }
+  }
+
 }

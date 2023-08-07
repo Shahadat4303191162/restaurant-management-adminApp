@@ -4,6 +4,7 @@ import 'package:cafe_admin/provider/product_provider.dart';
 import 'package:cafe_admin/utils/helper_function.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 class NewProductPage extends StatefulWidget {
@@ -26,6 +27,9 @@ class _NewProductPageState extends State<NewProductPage> {
   late StreamSubscription<ConnectivityResult> subscription;
   bool _isConnected = true,isUploading = false, isSaving = false;
   String? _category;
+  String? _thumbnailImageUrl;
+  DateTime? _purchaseDate;
+  ImageSource _imageSource = ImageSource.gallery;
 
   @override
   void initState() {
@@ -258,9 +262,114 @@ class _NewProductPageState extends State<NewProductPage> {
             const SizedBox(
               height: 10,
             ),
+              Card(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    TextButton(
+                        onPressed: _selectDate,
+                        child: const Text('Select Purchase Date'),),
+                    Text(_purchaseDate == null ? 'No Date Chosen' : getFormattedTime(_purchaseDate!, 'dd/MM/yyyy'))
+                  ],
+                ),
+              ),
+            // const SizedBox(
+            //   height: 10,
+            // ),
+              Center(
+                child: Card(
+                  elevation: 5,
+                  child: Padding(
+                    padding: EdgeInsets.all(0.0),
+                    child: _thumbnailImageUrl == null ?
+                        isUploading ?
+                            const Center(child: CircularProgressIndicator() ,) :
+                    Image.asset(
+                      'images/placeholder.jpg',
+                      width: 100,
+                      height: 100,
+                      fit: BoxFit.cover,
+                    )
+                        : FadeInImage.assetNetwork(
+                        placeholder: 'images/loading.gif',
+                        image: _thumbnailImageUrl!,
+                        fadeInDuration: const Duration(seconds: 1),
+                        fadeInCurve: Curves.bounceInOut,
+                        width: 100,
+                        height: 100,
+                        fit: BoxFit.cover,
+                    )
+                  ),
+                ),
+              ),
+            const SizedBox(
+              height: 10,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ElevatedButton(
+                    onPressed: (){
+                      _imageSource = ImageSource.camera;
+                      _getImage();
+                    },
+                    child: const Text('Camera'),
+                ),
+                const SizedBox(
+                  width: 20,
+                ),
+                ElevatedButton(
+                    onPressed: (){
+                      _imageSource = ImageSource.gallery;
+                      _getImage();
+                    },
+                    child: const Text('Gallery'),)
+              ],
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            ElevatedButton(
+                onPressed: _saveProduct,
+                child: const Text('SAVE'))
           ],
         ),
       ),
     );
+  }
+
+  void _selectDate() async{
+    final selectDate = await showDatePicker(
+        context: context,
+        initialDate: DateTime.now(),
+        firstDate: DateTime(2000),
+        lastDate: DateTime.now());
+    if(selectDate != null){
+      setState(() {
+        _purchaseDate = selectDate;
+      });
+    }
+  }
+
+  void _getImage() async{
+    final selectedImage = await ImagePicker().pickImage(source: _imageSource,imageQuality: 75);
+    if(selectedImage != null){
+      setState(() {
+        isUploading = true;
+      });
+      try{
+        final url = await context.read<ProductProvider>().updateProductImage(selectedImage);
+        setState(() {
+          _thumbnailImageUrl = url;
+          isUploading = false;
+        });
+      }catch(e){
+
+      }
+    }
+
+  }
+
+  void _saveProduct() {
   }
 }
