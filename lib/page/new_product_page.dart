@@ -1,11 +1,16 @@
 import 'dart:async';
 
+import 'package:cafe_admin/models/product_model.dart';
+import 'package:cafe_admin/models/purchase_model.dart';
 import 'package:cafe_admin/provider/product_provider.dart';
 import 'package:cafe_admin/utils/helper_function.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
+
+import '../models/date_model.dart';
 
 class NewProductPage extends StatefulWidget {
   static const String routeName = '/new_product';
@@ -371,5 +376,42 @@ class _NewProductPageState extends State<NewProductPage> {
   }
 
   void _saveProduct() {
+    if(_thumbnailImageUrl== null){
+      showMsg(context, 'Image required for product');
+      return;
+    }
+    if(_purchaseDate == null){
+      showMsg(context, 'purchase date is required');
+      return;
+    }
+    if(from_key.currentState!.validate()){
+      final productModel = ProductModel(
+          name: _namController.text,
+          shortDescription: _shortDescriptionController.text.isEmpty? null : _shortDescriptionController.text,
+          longDescription: _longDescriptionController.text.isEmpty? null: _longDescriptionController.text,
+          category: _category,
+          productDiscount: num.parse(_discountController.text),
+          salesPrice: num.parse(_salesPriceController.text),
+          stock: num.parse(_quantityController.text),
+          thumbnailImageUrl: _thumbnailImageUrl,
+          additionalImages: ['','','','']
+      );
+      final purchaseModel = PurchaseModel(
+          dateModel: DateModel(
+            timestamp: Timestamp.fromDate(_purchaseDate!),
+            day: _purchaseDate!.day,
+            month: _purchaseDate!.month,
+            year:_purchaseDate!.year,
+          ),
+          price: num.parse(_purchasePriceController.text),
+          quantity: num.parse(_quantityController.text)
+      );
+      final catModel = context.read<ProductProvider>().getCategoryByName(_category!);
+      context.read<ProductProvider>().addProduct(productModel, purchaseModel, catModel).then((value) {
+        setState(() {
+
+        });
+      });
+    }
   }
 }

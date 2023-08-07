@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:cafe_admin/db/dbhelper.dart';
+import 'package:cafe_admin/models/purchase_model.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -36,6 +37,16 @@ class ProductProvider extends ChangeNotifier{
   }
 
   //category section end
+
+  CategoryModel getCategoryByName (String name){
+    final model = categoryList.firstWhere((element) => element.name == name);
+    return model;
+  }
+  
+  Future<void> addProduct(ProductModel productModel,PurchaseModel purchaseModel,CategoryModel categoryModel){
+    final count = categoryModel.productCount + purchaseModel.quantity;
+    return DbHelper.addProduct(productModel, purchaseModel, categoryModel.id!, count);
+  }
 
   Future<String> updateProductImage(XFile xFile) async{
     final imageName = 'productImage_${DateTime.now().microsecondsSinceEpoch}';
