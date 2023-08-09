@@ -8,7 +8,6 @@ const String productSalesPrice = 'salesPrice';
 const String productStock = 'stock';
 const String productRatingCount = 'ratingCount';
 const String productPriceDiscount = 'productDiscount';
-const String productAdditionalImages = 'additionalImages';
 const String productRating = 'rating';
 const String productFeatured = 'featured';
 const String productAvailable = 'available';
@@ -16,7 +15,6 @@ const String productAvailable = 'available';
 class ProductModel{
   String? id,name,category,shortDescription,thumbnailImageUrl,longDescription;
   num salesPrice,stock,ratingCount,productDiscount;
-  List<String> additionalImages;
   double rating;
   bool featured,available;
 
@@ -31,10 +29,9 @@ class ProductModel{
       this.stock = 0,
       this.ratingCount =0,
       this.productDiscount = 0,
-      required this.additionalImages,
       this.rating = 0.0,
       this.featured = true,
-      this.available = true});
+      this.available = true,});
 
   Map<String,dynamic>toMap(){
     return <String,dynamic>{
@@ -48,7 +45,6 @@ class ProductModel{
       productStock : stock,
       productRatingCount : ratingCount,
       productPriceDiscount : productDiscount,
-      productAdditionalImages : additionalImages,
       productRating : rating,
       productFeatured : featured,
       productAvailable : available,
@@ -68,8 +64,6 @@ class ProductModel{
         stock: map[productStock],
         ratingCount: map[productRatingCount],
         productDiscount: map[productPriceDiscount],
-        additionalImages: map[productAdditionalImages]== null? ['','','']:
-        (map[productThumbnailImage] as List).map((e) => e as String).toList(),
         rating: map[productRating],
         featured: map[productFeatured],
         available: map[productAvailable],

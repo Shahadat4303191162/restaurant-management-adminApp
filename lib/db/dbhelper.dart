@@ -40,4 +40,14 @@ class DbHelper{
 
   static Stream<QuerySnapshot<Map<String,dynamic>>> getAllCategories()=>
       _db.collection(collectionCategory).snapshots();
+
+  static Stream<QuerySnapshot<Map<String,dynamic>>> getAllProducts()=>
+      _db.collection(collectionProduct).snapshots();
+
+  static Stream<DocumentSnapshot<Map<String,dynamic>>> getProductById(String id)=>
+      _db.collection(collectionProduct).doc(id).snapshots();
+
+  static Future<void> updateProduct(String id, Map<String,dynamic>map){
+    return _db.collection(collectionProduct).doc(id).update(map);
+  }
 }

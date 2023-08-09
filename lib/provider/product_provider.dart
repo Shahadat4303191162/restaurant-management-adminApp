@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:cafe_admin/db/dbhelper.dart';
 import 'package:cafe_admin/models/purchase_model.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -54,6 +55,20 @@ class ProductProvider extends ChangeNotifier{
     final task = photoRaf.putFile(File(xFile.path));
     final snapshot = await task.whenComplete(() => null);
     return snapshot.ref.getDownloadURL();
+  }
+  
+  getAllProducts(){
+    DbHelper.getAllProducts().listen((snapshot) {
+      productList = List.generate(snapshot.docs.length, (index) =>
+          ProductModel.fromMap(snapshot.docs[index].data()));
+      notifyListeners();
+    });
+  }
+  Stream<DocumentSnapshot<Map<String,dynamic>>> getProductById(String id) =>
+  DbHelper.getProductById(id);
+
+  Future<void> updateProductField(String productId,String field, dynamic value){
+    return DbHelper.updateProduct(productId, {field : value});
   }
 
  }

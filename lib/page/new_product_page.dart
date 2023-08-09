@@ -7,6 +7,7 @@ import 'package:cafe_admin/utils/helper_function.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
@@ -251,17 +252,17 @@ class _NewProductPageState extends State<NewProductPage> {
             Consumer<ProductProvider>(
                 builder: (context, provider, _) =>
                     DropdownButtonFormField<String>(
-                        items: provider.categoryList.map((model) => DropdownMenuItem<String>(
+                      onChanged: (value){
+                        setState(() {
+                          _category = value;
+                        });
+                      },
+                      hint: const Text('select category'),
+                      value: _category,
+                      items: provider.categoryList.map((model) => DropdownMenuItem<String>(
                           value: model.name,
                           child: Text(model.name!),
                         )).toList(),
-                        onChanged: (value){
-                          setState(() {
-                            _category = value;
-                          });
-                        },
-                        hint: const Text('select category'),
-                        value: _category,
                     )
               ),
             const SizedBox(
@@ -335,7 +336,7 @@ class _NewProductPageState extends State<NewProductPage> {
               height: 10,
             ),
             ElevatedButton(
-                onPressed: _saveProduct,
+                onPressed: isUploading ? null : _saveProduct,
                 child: const Text('SAVE'))
           ],
         ),
@@ -385,6 +386,7 @@ class _NewProductPageState extends State<NewProductPage> {
       return;
     }
     if(from_key.currentState!.validate()){
+      EasyLoading.show(status: 'Please Wait....',dismissOnTap: false);
       final productModel = ProductModel(
           name: _namController.text,
           shortDescription: _shortDescriptionController.text.isEmpty? null : _shortDescriptionController.text,
@@ -394,7 +396,6 @@ class _NewProductPageState extends State<NewProductPage> {
           salesPrice: num.parse(_salesPriceController.text),
           stock: num.parse(_quantityController.text),
           thumbnailImageUrl: _thumbnailImageUrl,
-          additionalImages: ['','','','']
       );
       final purchaseModel = PurchaseModel(
           dateModel: DateModel(
@@ -408,8 +409,17 @@ class _NewProductPageState extends State<NewProductPage> {
       );
       final catModel = context.read<ProductProvider>().getCategoryByName(_category!);
       context.read<ProductProvider>().addProduct(productModel, purchaseModel, catModel).then((value) {
+        EasyLoading.dismiss();
         setState(() {
-
+          _namController.clear();
+          _shortDescriptionController.clear();
+          _longDescriptionController.clear();
+          _discountController.clear();
+          _salesPriceController.clear();
+          _quantityController.clear();
+          _purchaseDate = null;
+          _thumbnailImageUrl = null;
+          _category = null;
         });
       });
     }

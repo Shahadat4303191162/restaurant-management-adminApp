@@ -5,6 +5,7 @@ import 'package:cafe_admin/page/launcher_page.dart';
 import 'package:cafe_admin/page/login_page.dart';
 import 'package:cafe_admin/page/new_product_page.dart';
 import 'package:cafe_admin/page/order_list_page.dart';
+import 'package:cafe_admin/page/product_details_page.dart';
 import 'package:cafe_admin/page/product_page.dart';
 import 'package:cafe_admin/page/sales_page.dart';
 import 'package:cafe_admin/page/settings_page.dart';
@@ -43,6 +44,7 @@ class MyApp extends StatelessWidget {
         LoginPage.routeName: (_) => LoginPage(),
         DashboardPage.routeName:(_) => DashboardPage(),
         ProductPage.routeName: (_) => ProductPage(),
+        ProductDetailsPage.routeName: (_) => ProductDetailsPage(),
         CategoryPage.routeName: (_) => CategoryPage(),
         SettingsPage.routeName: (_) => SettingsPage(),
         OrderPage.routeName: (_) => OrderPage(),
