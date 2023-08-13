@@ -46,10 +46,10 @@ class ProductPage extends StatelessWidget {
                         ),
                         title: Text(product.name!),
                         subtitle: Text('stock : ${product.stock}'),
-                        trailing: Text(
-                          '$currencysymbol ${product.salesPrice}',
-                          style: const TextStyle(color: Colors.green),
-                        ),
+                        // trailing: Text(
+                        //   '$currencysymbol ${product.salesPrice}',
+                        //   style: const TextStyle(color: Colors.green),
+                        // ),
                       ),
                     );
                   },

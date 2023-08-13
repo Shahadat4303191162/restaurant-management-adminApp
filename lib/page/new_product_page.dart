@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:cafe_admin/models/product_model.dart';
 import 'package:cafe_admin/models/purchase_model.dart';
+import 'package:cafe_admin/models/size_model.dart';
 import 'package:cafe_admin/provider/product_provider.dart';
 import 'package:cafe_admin/utils/helper_function.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -30,6 +31,7 @@ class _NewProductPageState extends State<NewProductPage> {
   final _salesPriceController = TextEditingController();
   final _discountController = TextEditingController();
   final _quantityController = TextEditingController();
+  final _sizeController = TextEditingController();
   late StreamSubscription<ConnectivityResult> subscription;
   bool _isConnected = true,isUploading = false, isSaving = false;
   String? _category;
@@ -62,6 +64,7 @@ class _NewProductPageState extends State<NewProductPage> {
     _salesPriceController.dispose();
     _discountController.dispose();
     _quantityController.dispose();
+    _sizeController.dispose();
     subscription.cancel();
     super.dispose();
   }
@@ -150,56 +153,6 @@ class _NewProductPageState extends State<NewProductPage> {
               height: 10,
             ),
             TextFormField(
-              controller: _purchasePriceController,
-              keyboardType: TextInputType.number,
-              decoration: InputDecoration(
-                labelText: 'Enter Purchase Price',
-                  prefixIcon: Icon(Icons.monetization_on_outlined,
-                    color: Theme.of(context).primaryColor,),
-                  enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(width: 1,color: Theme.of(context).primaryColor),
-                      borderRadius: BorderRadius.circular(20.0)
-                  )
-              ),
-              validator: (value){
-                if(value == null || value.isEmpty){
-                  return 'This field must not be empty';
-                }
-                if(num.parse(value)<= 0){
-                  return 'Price should be greater than 0';
-                }
-                return null;
-              },
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            TextFormField(
-              controller: _salesPriceController,
-              keyboardType: TextInputType.number,
-              decoration: InputDecoration(
-                  labelText: 'Enter Sales Price',
-                  prefixIcon: Icon(Icons.monetization_on,
-                    color: Theme.of(context).primaryColor,),
-                  enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(width: 1,color: Theme.of(context).primaryColor),
-                      borderRadius: BorderRadius.circular(20.0)
-                  )
-              ),
-              validator: (value){
-                if(value == null || value.isEmpty){
-                  return 'This field must not be empty';
-                }
-                if(num.parse(value)<= 0){
-                  return 'Price should be greater than 0';
-                }
-                return null;
-              },
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            TextFormField(
               controller: _quantityController,
               keyboardType: TextInputType.number,
               decoration: InputDecoration(
@@ -242,6 +195,9 @@ class _NewProductPageState extends State<NewProductPage> {
                 }
                 if(num.parse(value) < 0){
                   return 'Discount should not be a negative value';
+                }
+                if(num.parse(value) > 80){
+                  return 'Discount amounts of up to 80%';
                 }
                 return null;
               },
@@ -393,7 +349,6 @@ class _NewProductPageState extends State<NewProductPage> {
           longDescription: _longDescriptionController.text.isEmpty? null: _longDescriptionController.text,
           category: _category,
           productDiscount: num.parse(_discountController.text),
-          salesPrice: num.parse(_salesPriceController.text),
           stock: num.parse(_quantityController.text),
           thumbnailImageUrl: _thumbnailImageUrl,
       );
@@ -404,7 +359,6 @@ class _NewProductPageState extends State<NewProductPage> {
             month: _purchaseDate!.month,
             year:_purchaseDate!.year,
           ),
-          price: num.parse(_purchasePriceController.text),
           quantity: num.parse(_quantityController.text)
       );
       final catModel = context.read<ProductProvider>().getCategoryByName(_category!);

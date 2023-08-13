@@ -1,10 +1,11 @@
+import 'package:cafe_admin/models/size_model.dart';
+
 const String productId = 'id';
 const String productName = 'name';
 const String productCategory = 'category';
 const String productShortDescription = 'shortDescription';
 const String productLongDescription = 'longDescription';
 const String productThumbnailImage = 'thumbnailImageUrl';
-const String productSalesPrice = 'salesPrice';
 const String productStock = 'stock';
 const String productRatingCount = 'ratingCount';
 const String productPriceDiscount = 'productDiscount';
@@ -14,7 +15,7 @@ const String productAvailable = 'available';
 
 class ProductModel{
   String? id,name,category,shortDescription,thumbnailImageUrl,longDescription;
-  num salesPrice,stock,ratingCount,productDiscount;
+  num stock,ratingCount,productDiscount;
   double rating;
   bool featured,available;
 
@@ -25,7 +26,6 @@ class ProductModel{
       this.shortDescription,
       this.thumbnailImageUrl,
       this.longDescription,
-      required this.salesPrice,
       this.stock = 0,
       this.ratingCount =0,
       this.productDiscount = 0,
@@ -41,7 +41,6 @@ class ProductModel{
       productShortDescription : shortDescription,
       productThumbnailImage : thumbnailImageUrl,
       productLongDescription : longDescription,
-      productSalesPrice : salesPrice,
       productStock : stock,
       productRatingCount : ratingCount,
       productPriceDiscount : productDiscount,
@@ -60,7 +59,6 @@ class ProductModel{
         shortDescription: map[productShortDescription],
         thumbnailImageUrl: map[productThumbnailImage],
         longDescription: map[productLongDescription],
-        salesPrice: map[productSalesPrice],
         stock: map[productStock],
         ratingCount: map[productRatingCount],
         productDiscount: map[productPriceDiscount],

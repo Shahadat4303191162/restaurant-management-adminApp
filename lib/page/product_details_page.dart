@@ -16,6 +16,10 @@ class ProductDetailsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final editingController =TextEditingController();
+    final sizeController = TextEditingController();
+    final purchasePriceController = TextEditingController();
+    final salePriceController = TextEditingController();
+
     final pid = ModalRoute.of(context)!.settings.arguments as String;
     final provider = Provider.of<ProductProvider>(context,listen: false);
     return Scaffold(
@@ -93,49 +97,49 @@ class ProductDetailsPage extends StatelessWidget {
                         ),
                       ),
                     ),
-                    Card(
-                      elevation: 5,
-                      child: ListTile(
-                        title: const Text('Sales Price',style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold),),
-                        subtitle: Text(
-                          '$currencysymbol ${product.salesPrice}',
-                          style: const TextStyle(color: Colors.green),
-                        ),
-                        trailing: IconButton(
-                          icon: const Icon(Icons.edit),
-                          onPressed: () {
-                            showDialog(
-                                context: context,
-                                builder: (BuildContext context){
-                                  return AlertDialog(
-                                    title: const Text('Edit Sales Price'),
-                                    content: TextField(
-                                      keyboardType: TextInputType.number,
-                                      controller: editingController,
-                                      decoration: InputDecoration(
-                                        hintText: '$currencysymbol ${product.salesPrice}',
-                                      ),
-                                    ),
-                                    actions: [
-                                      ElevatedButton(
-                                        onPressed: () {
-                                          Navigator.of(context).pop();
-                                        },
-                                        child: const Text('Cancel'),),
-                                      ElevatedButton(
-                                        onPressed: () {
-                                          provider.updateProductField(pid, productSalesPrice, num.parse(editingController.text));
-                                          Navigator.of(context).pop();
-                                        },
-                                        child: const Text('Save'),
-                                      )
-                                    ],
-                                  );
-                                });
-                          },
-                        ),
-                      ),
-                    ),
+                    // Card(
+                    //   elevation: 5,
+                    //   child: ListTile(
+                    //     title: const Text('Sales Price',style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold),),
+                    //     subtitle: Text(
+                    //       '$currencysymbol ${product.salesPrice}',
+                    //       style: const TextStyle(color: Colors.green),
+                    //     ),
+                    //     trailing: IconButton(
+                    //       icon: const Icon(Icons.edit),
+                    //       onPressed: () {
+                    //         showDialog(
+                    //             context: context,
+                    //             builder: (BuildContext context){
+                    //               return AlertDialog(
+                    //                 title: const Text('Edit Sales Price'),
+                    //                 content: TextField(
+                    //                   keyboardType: TextInputType.number,
+                    //                   controller: editingController,
+                    //                   decoration: InputDecoration(
+                    //                     hintText: '$currencysymbol ${product.salesPrice}',
+                    //                   ),
+                    //                 ),
+                    //                 actions: [
+                    //                   ElevatedButton(
+                    //                     onPressed: () {
+                    //                       Navigator.of(context).pop();
+                    //                     },
+                    //                     child: const Text('Cancel'),),
+                    //                   ElevatedButton(
+                    //                     onPressed: () {
+                    //                       provider.updateProductField(pid, productSalesPrice, num.parse(editingController.text));
+                    //                       Navigator.of(context).pop();
+                    //                     },
+                    //                     child: const Text('Save'),
+                    //                   )
+                    //                 ],
+                    //               );
+                    //             });
+                    //       },
+                    //     ),
+                    //   ),
+                    // ),
                     Card(
                       elevation: 5,
                       child: ListTile(
@@ -269,7 +273,104 @@ class ProductDetailsPage extends StatelessWidget {
                         value: product.featured,
                         onChanged: (value) {
                           provider.updateProductField(pid, productFeatured, value);
-                        })
+                        }),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 10,horizontal: 10),
+                      child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.amber
+                          ),
+                          onPressed: () {
+                            showDialog(
+                                context: context,
+                                builder: (BuildContext context){
+                                  return AlertDialog(
+                                    title: const Text('Set Price & Size'),
+                                    content: ListView(
+                                      children: [
+                                        TextFormField(
+                                          controller: sizeController,
+                                          keyboardType: TextInputType.number,
+                                          decoration: InputDecoration(
+                                              labelText: 'Size (optional)',
+                                              prefixIcon: Icon(Icons.next_week_outlined,
+                                                color: Theme.of(context).primaryColor,),
+                                              enabledBorder: OutlineInputBorder(
+                                                  borderSide: BorderSide(width: 1,color: Theme.of(context).primaryColor),
+                                                  borderRadius: BorderRadius.circular(20.0)
+                                              )
+                                          ),
+                                          validator: (value){
+                                            return null;
+                                          },
+                                        ),
+                                        TextFormField(
+                                          controller: purchasePriceController,
+                                          keyboardType: TextInputType.number,
+                                          decoration: InputDecoration(
+                                              labelText: 'Purchase Price',
+                                              prefixIcon: Icon(Icons.next_week_outlined,
+                                                color: Theme.of(context).primaryColor,),
+                                              enabledBorder: OutlineInputBorder(
+                                                  borderSide: BorderSide(width: 1,color: Theme.of(context).primaryColor),
+                                                  borderRadius: BorderRadius.circular(20.0)
+                                              )
+                                          ),
+                                          validator: (value){
+                                            if(value == null || value.isEmpty){
+                                              return 'This field must not be empty';
+                                            }
+                                            if(num.parse(value)<= 0){
+                                              return 'Purchase Price should be greater than 0';
+                                            }
+                                            return null;
+                                          },
+                                        ),
+                                        TextFormField(
+                                          controller: salePriceController,
+                                          keyboardType: TextInputType.number,
+                                          decoration: InputDecoration(
+                                              labelText: 'Sale Price',
+                                              prefixIcon: Icon(Icons.next_week_outlined,
+                                                color: Theme.of(context).primaryColor,),
+                                              enabledBorder: OutlineInputBorder(
+                                                  borderSide: BorderSide(width: 1,color: Theme.of(context).primaryColor),
+                                                  borderRadius: BorderRadius.circular(20.0)
+                                              )
+                                          ),
+                                          validator: (value){
+                                            if(value == null || value.isEmpty){
+                                              return 'This field must not be empty';
+                                            }
+                                            if(num.parse(value)<= 0){
+                                              return 'Sale Price should be greater than 0';
+                                            }
+                                            return null;
+                                          },
+                                        )
+                                      ],
+                                    ),
+                                    actions: [
+                                      ElevatedButton(
+                                          onPressed: () {
+                                            Navigator.of(context).pop();
+                                          },
+                                          child: const Text('cancel')),
+                                      ElevatedButton(
+                                          onPressed: (){
+
+                                          },
+                                          child: const Text('Save'),
+                                      ),
+                                    ],
+                                  );
+                                });
+                          },
+                          child: const Text('Set Product Price ',
+                            style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold,color: Colors.black),
+                          ),
+                      ),
+                    )
                   ],
                 );
               }
