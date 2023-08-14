@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:cafe_admin/db/dbhelper.dart';
 import 'package:cafe_admin/models/purchase_model.dart';
+import 'package:cafe_admin/models/divers_selection_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +15,7 @@ class ProductProvider extends ChangeNotifier{
 
   List<ProductModel> productList = []; //collection
   List<CategoryModel> categoryList = [];
+  List<DiverseSelectionModel> priceVariationList = [];
 
 
   //category section start
@@ -44,9 +46,17 @@ class ProductProvider extends ChangeNotifier{
     return model;
   }
   
-  Future<void> addProduct(ProductModel productModel,PurchaseModel purchaseModel,CategoryModel categoryModel){
+  Future<void> addProduct(
+      ProductModel productModel,
+      PurchaseModel purchaseModel,
+      CategoryModel categoryModel,
+      DiverseSelectionModel diverseSelectionModel){
     final count = categoryModel.productCount + purchaseModel.quantity;
-    return DbHelper.addProduct(productModel, purchaseModel, categoryModel.id!, count);
+    return DbHelper.addProduct(
+        productModel,
+        purchaseModel,
+        diverseSelectionModel ,
+        categoryModel.id!, count);
   }
 
   Future<String> updateProductImage(XFile xFile) async{
@@ -64,6 +74,16 @@ class ProductProvider extends ChangeNotifier{
       notifyListeners();
     });
   }
+
+  getProductByPriceVariation(String id){
+    DbHelper.getProductByPriceVariation(id).listen((snapshot) {
+      priceVariationList = List.generate(snapshot.docs.length, (index) =>
+          DiverseSelectionModel.fromMap(snapshot.docs[index].data())
+      );
+      notifyListeners();
+    });
+  }
+
   Stream<DocumentSnapshot<Map<String,dynamic>>> getProductById(String id) =>
   DbHelper.getProductById(id);
 

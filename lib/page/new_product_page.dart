@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:cafe_admin/models/product_model.dart';
 import 'package:cafe_admin/models/purchase_model.dart';
-import 'package:cafe_admin/models/size_model.dart';
+import 'package:cafe_admin/models/divers_selection_model.dart';
 import 'package:cafe_admin/provider/product_provider.dart';
 import 'package:cafe_admin/utils/helper_function.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -146,6 +146,78 @@ class _NewProductPageState extends State<NewProductPage> {
                 )
               ),
               validator: (value){
+                return null;
+              },
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            TextFormField(
+              controller: _sizeController,
+              keyboardType: TextInputType.text,
+              decoration: InputDecoration(
+                  labelText: 'Size (optional)',
+                  prefixIcon: Icon(
+                    Icons.next_week_outlined,
+                    color: Theme.of(context).primaryColor,
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                          width: 1, color: Theme.of(context).primaryColor),
+                      borderRadius: BorderRadius.circular(20.0))),
+              validator: (value) {
+                return null;
+              },
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            TextFormField(
+              controller: _purchasePriceController,
+              keyboardType: TextInputType.number,
+              decoration: InputDecoration(
+                  labelText: 'Purchase Price',
+                  prefixIcon: Icon(
+                    Icons.monetization_on_outlined,
+                    color: Theme.of(context).primaryColor,
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                          width: 1, color: Theme.of(context).primaryColor),
+                      borderRadius: BorderRadius.circular(20.0))),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'This field must not be empty';
+                }
+                if (num.parse(value) <= 0) {
+                  return 'Purchase Price should be greater than 0';
+                }
+                return null;
+              },
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            TextFormField(
+              controller: _salesPriceController,
+              keyboardType: TextInputType.number,
+              decoration: InputDecoration(
+                  labelText: 'Sale Price',
+                  prefixIcon: Icon(
+                    Icons.monetization_on,
+                    color: Theme.of(context).primaryColor,
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                          width: 1, color: Theme.of(context).primaryColor),
+                      borderRadius: BorderRadius.circular(20.0))),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'This field must not be empty';
+                }
+                if (num.parse(value) <= 0) {
+                  return 'Sale Price should be greater than 0';
+                }
                 return null;
               },
             ),
@@ -361,8 +433,13 @@ class _NewProductPageState extends State<NewProductPage> {
           ),
           quantity: num.parse(_quantityController.text)
       );
+      final diverseSelectionModel = DiverseSelectionModel(
+          size: _sizeController.text.isEmpty? null :_sizeController.text,
+          salePrice: num.parse(_salesPriceController.text),
+          purPrice: num.parse(_purchasePriceController.text)
+      );
       final catModel = context.read<ProductProvider>().getCategoryByName(_category!);
-      context.read<ProductProvider>().addProduct(productModel, purchaseModel, catModel).then((value) {
+      context.read<ProductProvider>().addProduct(productModel, purchaseModel, catModel,diverseSelectionModel).then((value) {
         EasyLoading.dismiss();
         setState(() {
           _namController.clear();
