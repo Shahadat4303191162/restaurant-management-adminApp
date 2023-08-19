@@ -17,24 +17,34 @@ class DashboardPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final double screenWidth = MediaQuery.of(context).size.width;
+    final int crossAxisCount = screenWidth >800 ? 3 : 2;
     Provider.of<ProductProvider>(context, listen: false).getAllCategories();
     Provider.of<ProductProvider>(context, listen: false).getAllProducts();
     return Scaffold(
       appBar: AppBar(
         title: const Text('Dash board'),
       ),
-      body: GridView.builder(
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
+      body:
+      Padding(
+        padding: EdgeInsets.symmetric(vertical: 20,
+            horizontal: screenWidth > 1000
+                ? screenWidth * 0.3
+                : screenWidth > 600 ? screenWidth*0.1 : 20),
+        child: GridView.builder(
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: crossAxisCount,
               crossAxisSpacing: 4,
               mainAxisSpacing: 4),
           itemCount: dashboardItem.length,
           itemBuilder: (context, index) => DashboardItemView(
               item: dashboardItem[index],
-              onPressed: (value){
+              onPressed: (value) {
                 final route = navigate(value);
                 Navigator.pushNamed(context, route);
-              }),),
+              }),
+        ),
+      ),
     );
   }
 

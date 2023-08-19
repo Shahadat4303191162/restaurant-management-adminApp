@@ -11,192 +11,284 @@ import '../utils/helper_function.dart';
 
 class ProductDetailsPage extends StatelessWidget {
   static const String routeName = '/details_page';
-  const ProductDetailsPage({super.key});
 
+  const ProductDetailsPage({super.key});
 
   @override
   Widget build(BuildContext context) {
+
     final from_key = GlobalKey<FormState>();
-    final editingController =TextEditingController();
-    final priceEditingController =TextEditingController();
+    final editingController = TextEditingController();
+    final priceEditingController = TextEditingController();
     final sizeController = TextEditingController();
     final purchasePriceController = TextEditingController();
     final salePriceController = TextEditingController();
-
     final pid = ModalRoute.of(context)!.settings.arguments as String;
-    //final priceVariation = Provider.of<ProductProvider>(context,listen: false).getProductByPriceVariation(pid);
+    final provider = Provider.of<ProductProvider>(context, listen: false);
+
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Product Details'),
       ),
-      body: Consumer<ProductProvider>(
-        builder: (context, provider, child) => StreamBuilder<DocumentSnapshot<Map<String,dynamic>>>(
-            stream: provider.getProductById(pid),
-            builder: (context, snapshot) {
-              if(snapshot.hasData){
-                final product = ProductModel.fromMap(snapshot.data!.data()!);
-                return ListView(
-                  children: [
-                    CachedNetworkImage(
-                      width: 75,
-                      imageUrl: product.thumbnailImageUrl!,
-                      placeholder: (context, url) =>
+      body: StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
+        stream: provider.getProductById(pid),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            final product = ProductModel.fromMap(snapshot.data!.data()!);
+            return ListView(
+              children: [
+                CachedNetworkImage(
+                  width: 75,
+                  imageUrl: product.thumbnailImageUrl!,
+                  placeholder: (context, url) =>
                       const CircularProgressIndicator(),
-                      errorWidget: (context, url, error) =>
-                      const Icon(Icons.error),
+                  errorWidget: (context, url, error) => const Icon(Icons.error),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    TextButton(
+                        onPressed: () {}, child: const Text('Re-Purchase')),
+                    TextButton(
+                      onPressed: () {},
+                      child: const Text('Purchase History'),
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        TextButton(
-                            onPressed: (){
+                  ],
+                ),
+                Card(
+                  elevation: 5,
+                  child: ListTile(
+                    title: Text(
+                      product.name!,
+                      style: const TextStyle(
+                          fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
+                    trailing: IconButton(
+                      icon: const Icon(Icons.edit),
+                      onPressed: () {
+                        showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: const Text('Edit Product Name'),
+                                content: TextField(
+                                  keyboardType: TextInputType.text,
+                                  controller: editingController,
+                                  decoration: InputDecoration(
+                                    hintText: product.name,
+                                  ),
+                                ),
+                                actions: [
+                                  ElevatedButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: const Text('Cancel'),
+                                  ),
+                                  ElevatedButton(
+                                    onPressed: () {
+                                      provider.updateProductField(pid,
+                                          productName, editingController.text);
+                                      Navigator.of(context).pop();
+                                      editingController.clear();
+                                    },
+                                    child: const Text('Save'),
+                                  )
+                                ],
+                              );
+                            });
+                      },
+                    ),
+                  ),
+                ),
+                Card(
+                  elevation: 5,
+                  child: ListTile(
+                    title: const Text('Sales Price',
+                        style: TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.bold)),
+                    subtitle: Text(
+                      '$currencysymbol ${product.salesPrice}',
+                      style: const TextStyle(color: Colors.green),
+                    ),
+                    trailing: IconButton(
+                      icon: const Icon(Icons.edit),
+                      onPressed: () {
+                        showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: const Text('Edit Sales Price'),
+                                content: TextField(
+                                  keyboardType: TextInputType.text,
+                                  controller: editingController,
+                                  decoration: InputDecoration(
+                                    hintText: '$currencysymbol ${product.salesPrice}',
+                                  ),
+                                ),
+                                actions: [
+                                  ElevatedButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: const Text('Cancel'),
+                                  ),
+                                  ElevatedButton(
+                                    onPressed: () {
+                                      provider.updateProductField(
+                                          pid,
+                                          productShortDescription,
+                                         num.parse(editingController.text));
+                                      Navigator.of(context).pop();
+                                      editingController.clear();
+                                    },
+                                    child: const Text('Save'),
+                                  )
+                                ],
+                              );
+                            });
+                      },
+                    ),
+                  ),
+                ),
+                ExpansionTile(title: const Text('Price Variations'), children: [
+                  Column(
+                    children: [
+                      Consumer<ProductProvider>(
+                        builder: (context, provider,_) {
+                          return ListView.builder(
+                            shrinkWrap: true,
+                            itemCount: provider.priceVariationList.length,
+                            itemBuilder: (context, index) {
+                              final priceList = provider.priceVariationList[index];
+                              return Column(
+                                children: [
+                                  ListTile(
+                                    title: Text('Size : ${priceList.size}'),
+                                    subtitle: Text(
+                                      'Sale Price : $currencysymbol ${priceList.salePrice}',
+                                      style: const TextStyle(color: Colors.green),
+                                    ),
+                                    trailing: IconButton(
+                                      icon: const Icon(Icons.edit),
+                                      onPressed: () {
+                                        showDialog(
+                                            context: context,
+                                            builder: (BuildContext context) {
+                                              return AlertDialog(
+                                                title:
+                                                    const Text('Edit Sales Price'),
+                                                content: Column(
+                                                  mainAxisSize: MainAxisSize.min,
+                                                  children: [
+                                                    TextField(
+                                                      keyboardType:
+                                                          TextInputType.text,
+                                                      controller: editingController,
+                                                      decoration: InputDecoration(
+                                                        hintText: priceList.size == null? 'Size' : priceList.size,
+                                                        //hintText: priceList.size,
+                                                      ),
+                                                    ),
+                                                    TextField(
+                                                      keyboardType:
+                                                          TextInputType.number,
+                                                      controller:
+                                                          priceEditingController,
+                                                      decoration: InputDecoration(
+                                                          hintText:
+                                                            '$currencysymbol ${priceList.salePrice}',
 
+                                                      ),
+                                                    )
+                                                  ],
+                                                ),
+                                                actions: [
+                                                  ElevatedButton(
+                                                    onPressed: () {
+                                                      Navigator.of(context).pop();
+                                                    },
+                                                    child: const Text('Cancel'),
+                                                  ),
+                                                  ElevatedButton(
+                                                    onPressed: () {
+                                                      provider.updateVariationPriceField(
+                                                          pid,
+                                                          priceList.id as String,
+                                                          diverseSelectionSize,
+                                                          editingController.text);
+                                                      provider.updateVariationPriceField(
+                                                          pid,
+                                                          priceList.id as String,
+                                                          diverseSelectionSalePrice,
+                                                          num.parse(
+                                                              priceEditingController
+                                                                  .text));
+                                                      provider.notifyListeners();
+                                                      Navigator.of(context).pop();
+                                                      editingController.clear();
+                                                      priceEditingController
+                                                          .clear();
+                                                    },
+                                                    child: const Text('Save'),
+                                                  )
+                                                ],
+                                              );
+                                            });
+                                      },
+                                    ),
+                                  ),
+                                ],
+                              );
                             },
-                            child: const Text('Re-Purchase')),
-                        TextButton(
-                          onPressed: () {
-
-                          },
-                          child: const Text('Purchase History'),
-                        ),
-                      ],
-                    ),
-                    Card(
-                      elevation: 5,
-                      child: ListTile(
-                        title: Text(product.name!,style: const TextStyle(fontSize: 18,fontWeight: FontWeight.bold),),
-                        trailing: IconButton(
-                          icon: const Icon(Icons.edit),
+                          );
+                        }
+                      ),
+                      ElevatedButton(
                           onPressed: () {
                             showDialog(
                                 context: context,
-                                builder: (BuildContext context){
+                                builder: (BuildContext context) {
                                   return AlertDialog(
-                                    title: const Text('Edit Product Name'),
-                                    content: TextField(
-                                      keyboardType: TextInputType.text,
-                                      controller: editingController,
-                                      decoration: InputDecoration(
-                                        hintText: product.name,
-                                      ),
-                                    ),
-                                    actions: [
-                                      ElevatedButton(
-                                        onPressed: () {
-                                          Navigator.of(context).pop();
-                                        },
-                                        child: const Text('Cancel'),),
-                                      ElevatedButton(
-                                        onPressed: () {
-                                          provider.updateProductField(pid, productName, editingController.text);
-                                          Navigator.of(context).pop();
-                                        },
-                                        child: const Text('Save'),
-                                      )
-                                    ],
-                                  );
-                                });
-                          },
-                        ),
-                      ),
-                    ),
-                    ExpansionTile(
-                    title: const Text('Price Variations'),
-                    children: provider.priceVariationList.map((priceList) {
-                      return Column(
-                        children: [
-                          ListTile(
-                            title: Text('Size : ${priceList.size}'),
-                            subtitle: Text(
-                              'Sale Price : $currencysymbol ${priceList.salePrice}',
-                              style: const TextStyle(color: Colors.green),
-                            ),
-                            trailing: IconButton(
-                              icon: const Icon(Icons.edit),
-                                onPressed: () {
-                                  showDialog(
-                                      context: context,
-                                      builder: (BuildContext context){
-                                        return AlertDialog(
-                                          title: const Text('Edit Sales Price'),
-                                          content: ListView(
-                                            children: [
-                                              TextField(
-                                                keyboardType: TextInputType.text,
-                                                controller: editingController,
-                                                decoration: InputDecoration(
-                                                  helperText: priceList.size,
-                                                  //hintText: priceList.size,
-                                                ),
-                                              ),
-                                              TextField(
-                                                keyboardType: TextInputType.number,
-                                                controller: priceEditingController,
-                                                decoration: InputDecoration(
-                                                  hintText: '$currencysymbol ${priceList.salePrice}',
-                                                ),
-                                              )
-                                            ],
-                                          ),
-                                          actions: [
-                                            ElevatedButton(
-                                              onPressed: () {
-                                                Navigator.of(context).pop();
-                                              },
-                                              child: const Text('Cancel'),),
-                                            ElevatedButton(
-                                              onPressed: () {
-                                                provider.updateProductField(pid, diverseSelectionSize, num.parse(editingController.text));
-                                                provider.updateProductField(pid, diverseSelectionSalePrice, num.parse(priceEditingController.text));
-                                                Navigator.of(context).pop();
-                                              },
-                                              child: const Text('Save'),
-                                            )
-                                          ],
-                                        );
-                                      });
-                                },
-                            ),
-                          ),
-                          ElevatedButton(
-                              onPressed: () {
-                                showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) {
-                                      return AlertDialog(
-                                        title: const Text('Set Price & Size'),
-                                        content: Form(
+                                    title: const Text('Set Price & Size'),
+                                    content: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Form(
                                           key: from_key,
-                                          child: ListView(
+                                          child: Column(
                                             children: [
                                               TextFormField(
                                                 controller: sizeController,
                                                 keyboardType:
                                                     TextInputType.text,
                                                 decoration: InputDecoration(
-                                                    labelText: 'Size (optional)',
-                                                    prefixIcon: Icon(Icons.next_week_outlined,
-                                                      color: Theme.of(context).primaryColor,
-                                                    ),
-                                                    enabledBorder: OutlineInputBorder(
-                                                        borderSide: BorderSide(width: 1, color: Theme.of(context).primaryColor),
-                                                        borderRadius: BorderRadius.circular(20.0))),
+                                                  labelText: 'Size (optional)',
+                                                  prefixIcon: Icon(
+                                                    Icons.next_week_outlined,
+                                                    color: Theme.of(context)
+                                                        .primaryColor,
+                                                  ),
+                                                ),
                                                 validator: (value) {
                                                   return null;
                                                 },
                                               ),
                                               TextFormField(
-                                                controller: purchasePriceController,
-                                                keyboardType: TextInputType.number,
+                                                controller:
+                                                    purchasePriceController,
+                                                keyboardType:
+                                                    TextInputType.number,
                                                 decoration: InputDecoration(
-                                                    labelText: 'Purchase Price',
-                                                    prefixIcon: Icon(
-                                                      Icons.next_week_outlined,
-                                                      color: Theme.of(context).primaryColor,
-                                                    ),
-                                                    enabledBorder: OutlineInputBorder(
-                                                        borderSide: BorderSide(width: 1, color: Theme.of(context).primaryColor),
-                                                        borderRadius: BorderRadius.circular(20.0))),
+                                                  labelText: 'Purchase Price',
+                                                  prefixIcon: Icon(
+                                                    Icons
+                                                        .monetization_on_outlined,
+                                                    color: Theme.of(context)
+                                                        .primaryColor,
+                                                  ),
+                                                ),
                                                 validator: (value) {
                                                   if (value == null ||
                                                       value.isEmpty) {
@@ -210,18 +302,19 @@ class ProductDetailsPage extends StatelessWidget {
                                               ),
                                               TextFormField(
                                                 controller: salePriceController,
-                                                keyboardType: TextInputType.number,
+                                                keyboardType:
+                                                    TextInputType.number,
                                                 decoration: InputDecoration(
-                                                    labelText: 'Sale Price',
-                                                    prefixIcon: Icon(
-                                                      Icons.next_week_outlined,
-                                                      color: Theme.of(context).primaryColor,
-                                                    ),
-                                                    enabledBorder: OutlineInputBorder(
-                                                        borderSide: BorderSide(width: 1, color: Theme.of(context).primaryColor),
-                                                        borderRadius: BorderRadius.circular(20.0))),
+                                                  labelText: 'Sale Price',
+                                                  prefixIcon: Icon(
+                                                    Icons.monetization_on,
+                                                    color: Theme.of(context)
+                                                        .primaryColor,
+                                                  ),
+                                                ),
                                                 validator: (value) {
-                                                  if (value == null || value.isEmpty) {
+                                                  if (value == null ||
+                                                      value.isEmpty) {
                                                     return 'This field must not be empty';
                                                   }
                                                   if (num.parse(value) <= 0) {
@@ -233,250 +326,7 @@ class ProductDetailsPage extends StatelessWidget {
                                             ],
                                           ),
                                         ),
-                                        actions: [
-                                          ElevatedButton(
-                                              onPressed: () {
-                                                Navigator.of(context).pop();
-                                              },
-                                              child: const Text('cancel')),
-                                          ElevatedButton(
-                                            onPressed: () {
-                                              if (from_key.currentState!.validate()) {
-                                                final diverseSelectionModel = DiverseSelectionModel(
-                                                    size: sizeController.text.isEmpty ? null : sizeController.text,
-                                                    salePrice: num.parse(salePriceController.text),
-                                                    purPrice: num.parse(purchasePriceController.text)
-                                                );
-                                              }
-                                            },
-                                            child: const Text('Save'),
-                                          ),
-                                        ],
-                                      );
-                                    });
-                              },
-                              child: const Text('ADD MORE'))
-                        ],
-                      );
-                    }).toList(),
-                  ),
-
-                    Card(
-                      elevation: 5,
-                      child: ListTile(
-                        title: const Text('Short Description',style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold),),
-                        subtitle: Text(product.shortDescription ?? 'Not Available'),
-                        trailing: IconButton(
-                          icon: const Icon(Icons.edit),
-                          onPressed: () {
-                            showDialog(
-                                context: context,
-                                builder: (BuildContext context){
-                                  return AlertDialog(
-                                    title: const Text('Edit Short Description'),
-                                    content: TextField(
-                                      maxLines: 2,
-                                      keyboardType: TextInputType.text,
-                                      controller: editingController,
-                                      decoration: InputDecoration(
-                                        hintText: product.shortDescription,
-                                      ),
-                                    ),
-                                    actions: [
-                                      ElevatedButton(
-                                        onPressed: () {
-                                          Navigator.of(context).pop();
-                                        },
-                                        child: const Text('Cancel'),),
-                                      ElevatedButton(
-                                        onPressed: () {
-                                          provider.updateProductField(pid, productShortDescription, editingController.text);
-                                          Navigator.of(context).pop();
-                                        },
-                                        child: const Text('Save'),
-                                      )
-                                    ],
-                                  );
-                                });
-                          },
-                        ),
-                      ),
-                    ),
-                    Card(
-                      elevation: 5,
-                      child: ListTile(
-                        title: const Text('Long Description',style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold),),
-                        subtitle: Text(product.longDescription ?? 'Not Available'),
-                        trailing: IconButton(
-                          icon: const Icon(Icons.edit),
-                          onPressed: () {
-                            showDialog(
-                                context: context,
-                                builder: (BuildContext context){
-                                  return AlertDialog(
-                                    title: const Text('Edit Long Description'),
-                                    content: TextField(
-                                      maxLines: 3,
-                                      keyboardType: TextInputType.text,
-                                      controller: editingController,
-                                      decoration: InputDecoration(
-                                        hintText: product.longDescription,
-                                      ),
-                                    ),
-                                    actions: [
-                                      ElevatedButton(
-                                        onPressed: () {
-                                          Navigator.of(context).pop();
-                                        },
-                                        child: const Text('Cancel'),),
-                                      ElevatedButton(
-                                        onPressed: () {
-                                          provider.updateProductField(pid, productLongDescription, editingController.text);
-                                          Navigator.of(context).pop();
-                                        },
-                                        child: const Text('Save'),
-                                      )
-                                    ],
-                                  );
-                                });
-                          },
-                        ),
-                      ),
-                    ),
-                    Card(
-                      elevation: 5,
-                    ),
-                    Card(
-                      elevation: 5,
-                      child: ListTile(
-                        title: const Text('Discount',style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold),),
-                        subtitle: Text('${product.productDiscount}%'),
-                        trailing: IconButton(
-                          icon: const Icon(Icons.edit),
-                          onPressed: () {
-                            showDialog(
-                                context: context,
-                                builder: (BuildContext context){
-                                  return AlertDialog(
-                                    title: const Text('Edit Discount'),
-                                    content: TextField(
-                                      keyboardType: TextInputType.number,
-                                      controller: editingController,
-                                      decoration: InputDecoration(
-                                        hintText: '${product.productDiscount}%',
-                                      ),
-                                    ),
-                                    actions: [
-                                      ElevatedButton(
-                                        onPressed: () {
-                                          Navigator.of(context).pop();
-                                        },
-                                        child: const Text('Cancel'),),
-                                      ElevatedButton(
-                                        onPressed: () {
-                                          provider.updateProductField(pid, productPriceDiscount, num.parse(editingController.text));
-                                          Navigator.of(context).pop();
-                                        },
-                                        child: const Text('Save'),
-                                      )
-                                    ],
-                                  );
-                                });
-                          },
-                        ),
-                      ),
-                    ),
-                    SwitchListTile(
-                        title: const Text('Available'),
-                        value: product.available,
-                        onChanged: (value) {
-                          provider.updateProductField(pid, productAvailable, value);
-                        }),
-                    SwitchListTile(
-                        title: const Text('Featured'),
-                        value: product.featured,
-                        onChanged: (value) {
-                          provider.updateProductField(pid, productFeatured, value);
-                        }),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 10,horizontal: 10),
-                      child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.amber
-                          ),
-                          onPressed: () {
-                            showDialog(
-                                context: context,
-                                builder: (BuildContext context){
-                                  return AlertDialog(
-                                    title: const Text('Set Price & Size'),
-                                    content: Form(
-                                      key: from_key,
-                                      child: ListView(
-                                        children: [
-                                          TextFormField(
-                                            controller: sizeController,
-                                            keyboardType: TextInputType.number,
-                                            decoration: InputDecoration(
-                                                labelText: 'Size (optional)',
-
-                                                prefixIcon: Icon(Icons.next_week_outlined,
-                                                  color: Theme.of(context).primaryColor,),
-                                                enabledBorder: OutlineInputBorder(
-                                                    borderSide: BorderSide(width: 1,color: Theme.of(context).primaryColor),
-                                                    borderRadius: BorderRadius.circular(20.0)
-                                                )
-                                            ),
-                                            validator: (value){
-                                              return null;
-                                            },
-                                          ),
-                                          TextFormField(
-                                            controller: purchasePriceController,
-                                            keyboardType: TextInputType.number,
-                                            decoration: InputDecoration(
-                                                labelText: 'Purchase Price',
-                                                prefixIcon: Icon(Icons.next_week_outlined,
-                                                  color: Theme.of(context).primaryColor,),
-                                                enabledBorder: OutlineInputBorder(
-                                                    borderSide: BorderSide(width: 1,color: Theme.of(context).primaryColor),
-                                                    borderRadius: BorderRadius.circular(20.0)
-                                                )
-                                            ),
-                                            validator: (value){
-                                              if(value == null || value.isEmpty){
-                                                return 'This field must not be empty';
-                                              }
-                                              if(num.parse(value)<= 0){
-                                                return 'Purchase Price should be greater than 0';
-                                              }
-                                              return null;
-                                            },
-                                          ),
-                                          TextFormField(
-                                            controller: salePriceController,
-                                            keyboardType: TextInputType.number,
-                                            decoration: InputDecoration(
-                                                labelText: 'Sale Price',
-                                                prefixIcon: Icon(Icons.next_week_outlined,
-                                                  color: Theme.of(context).primaryColor,),
-                                                enabledBorder: OutlineInputBorder(
-                                                    borderSide: BorderSide(width: 1,color: Theme.of(context).primaryColor),
-                                                    borderRadius: BorderRadius.circular(20.0)
-                                                )
-                                            ),
-                                            validator: (value){
-                                              if(value == null || value.isEmpty){
-                                                return 'This field must not be empty';
-                                              }
-                                              if(num.parse(value)<= 0){
-                                                return 'Sale Price should be greater than 0';
-                                              }
-                                              return null;
-                                            },
-                                          )
-                                        ],
-                                      ),
+                                      ],
                                     ),
                                     actions: [
                                       ElevatedButton(
@@ -485,35 +335,219 @@ class ProductDetailsPage extends StatelessWidget {
                                           },
                                           child: const Text('cancel')),
                                       ElevatedButton(
-                                          onPressed: (){
-                                            if(from_key.currentState!.validate()){
-                                              final diverseSelectionModel = DiverseSelectionModel(
-                                                  size: sizeController.text.isEmpty? null :sizeController.text,
-                                                  salePrice: num.parse(salePriceController.text),
-                                                  purPrice: num.parse(purchasePriceController.text)
-                                              );
-                                            }
-                                          },
-                                          child: const Text('Save'),
+                                        onPressed: () {
+                                          if (from_key.currentState!
+                                              .validate()) {
+                                            final diverseSelectionModel =
+                                                DiverseSelectionModel(
+                                                    size: sizeController
+                                                            .text.isEmpty
+                                                        ? null
+                                                        : sizeController.text,
+                                                    salePrice: num.parse(
+                                                        salePriceController
+                                                            .text),
+                                                    purPrice: num.parse(
+                                                        purchasePriceController
+                                                            .text));
+                                            context
+                                                .read<ProductProvider>()
+                                                .addMultiPriceSection(
+                                                    diverseSelectionModel, pid)
+                                                .then((value) {
+                                              sizeController.clear();
+                                              salePriceController.clear();
+                                              purchasePriceController.clear();
+                                              Navigator.of(context).pop();
+                                            });
+                                          }
+                                        },
+                                        child: const Text('Save'),
                                       ),
                                     ],
                                   );
                                 });
                           },
-                          child: const Text('Set Product Price ',
-                            style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold,color: Colors.black),
-                          ),
-                      ),
-                    )
-                  ],
-                );
-              }
-              if(snapshot.hasError){
-                return const Center(child: Text('Failed to get data'),);
-              }
-              return const Center(child: CircularProgressIndicator(),);
-            },),
-
+                          child: const Text('ADD MORE')),
+                    ],
+                  ),
+                ]),
+                Card(
+                  elevation: 5,
+                  child: ListTile(
+                    title: const Text(
+                      'Short Description',
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
+                    subtitle: Text(product.shortDescription ?? 'Not Available'),
+                    trailing: IconButton(
+                      icon: const Icon(Icons.edit),
+                      onPressed: () {
+                        showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: const Text('Edit Short Description'),
+                                content: TextField(
+                                  maxLines: 2,
+                                  keyboardType: TextInputType.text,
+                                  controller: editingController,
+                                  decoration: InputDecoration(
+                                    hintText: product.shortDescription,
+                                  ),
+                                ),
+                                actions: [
+                                  ElevatedButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: const Text('Cancel'),
+                                  ),
+                                  ElevatedButton(
+                                    onPressed: () {
+                                      provider.updateProductField(
+                                          pid,
+                                          productShortDescription,
+                                          editingController.text);
+                                      Navigator.of(context).pop();
+                                      editingController.clear();
+                                    },
+                                    child: const Text('Save'),
+                                  )
+                                ],
+                              );
+                            });
+                      },
+                    ),
+                  ),
+                ),
+                Card(
+                  elevation: 5,
+                  child: ListTile(
+                    title: const Text(
+                      'Long Description',
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
+                    subtitle: Text(product.longDescription ?? 'Not Available'),
+                    trailing: IconButton(
+                      icon: const Icon(Icons.edit),
+                      onPressed: () {
+                        showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: const Text('Edit Long Description'),
+                                content: TextField(
+                                  maxLines: 3,
+                                  keyboardType: TextInputType.text,
+                                  controller: editingController,
+                                  decoration: InputDecoration(
+                                    hintText: product.longDescription,
+                                  ),
+                                ),
+                                actions: [
+                                  ElevatedButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: const Text('Cancel'),
+                                  ),
+                                  ElevatedButton(
+                                    onPressed: () {
+                                      provider.updateProductField(
+                                          pid,
+                                          productLongDescription,
+                                          editingController.text);
+                                      Navigator.of(context).pop();
+                                      editingController.clear();
+                                    },
+                                    child: const Text('Save'),
+                                  )
+                                ],
+                              );
+                            });
+                      },
+                    ),
+                  ),
+                ),
+                Card(
+                  elevation: 5,
+                ),
+                Card(
+                  elevation: 5,
+                  child: ListTile(
+                    title: const Text(
+                      'Discount',
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
+                    subtitle: Text('${product.productDiscount}%'),
+                    trailing: IconButton(
+                      icon: const Icon(Icons.edit),
+                      onPressed: () {
+                        showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: const Text('Edit Discount'),
+                                content: TextField(
+                                  keyboardType: TextInputType.number,
+                                  controller: editingController,
+                                  decoration: InputDecoration(
+                                    hintText: '${product.productDiscount}%',
+                                  ),
+                                ),
+                                actions: [
+                                  ElevatedButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: const Text('Cancel'),
+                                  ),
+                                  ElevatedButton(
+                                    onPressed: () {
+                                      provider.updateProductField(
+                                          pid,
+                                          productPriceDiscount,
+                                          num.parse(editingController.text));
+                                      Navigator.of(context).pop();
+                                      editingController.clear();
+                                    },
+                                    child: const Text('Save'),
+                                  )
+                                ],
+                              );
+                            });
+                      },
+                    ),
+                  ),
+                ),
+                SwitchListTile(
+                    title: const Text('Available'),
+                    value: product.available,
+                    onChanged: (value) {
+                      provider.updateProductField(pid, productAvailable, value);
+                    }),
+                SwitchListTile(
+                    title: const Text('Featured'),
+                    value: product.featured,
+                    onChanged: (value) {
+                      provider.updateProductField(pid, productFeatured, value);
+                    }),
+              ],
+            );
+          }
+          if (snapshot.hasError) {
+            return const Center(
+              child: Text('Failed to get data'),
+            );
+          }
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        },
       ),
     );
   }

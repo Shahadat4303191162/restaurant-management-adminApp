@@ -7,6 +7,7 @@ const String productShortDescription = 'shortDescription';
 const String productLongDescription = 'longDescription';
 const String productThumbnailImage = 'thumbnailImageUrl';
 const String productStock = 'stock';
+const String productSalesPrice = 'salesPrice';
 const String productRatingCount = 'ratingCount';
 const String productPriceDiscount = 'productDiscount';
 const String productRating = 'rating';
@@ -15,7 +16,7 @@ const String productAvailable = 'available';
 
 class ProductModel{
   String? id,name,category,shortDescription,thumbnailImageUrl,longDescription;
-  num stock,ratingCount,productDiscount;
+  num stock,ratingCount,productDiscount,salesPrice;
   double rating;
   bool featured,available;
 
@@ -26,6 +27,7 @@ class ProductModel{
       this.shortDescription,
       this.thumbnailImageUrl,
       this.longDescription,
+      required this.salesPrice,
       this.stock = 0,
       this.ratingCount =0,
       this.productDiscount = 0,
@@ -42,6 +44,7 @@ class ProductModel{
       productThumbnailImage : thumbnailImageUrl,
       productLongDescription : longDescription,
       productStock : stock,
+      productSalesPrice : salesPrice,
       productRatingCount : ratingCount,
       productPriceDiscount : productDiscount,
       productRating : rating,
@@ -60,6 +63,7 @@ class ProductModel{
         thumbnailImageUrl: map[productThumbnailImage],
         longDescription: map[productLongDescription],
         stock: map[productStock],
+        salesPrice: map [productSalesPrice],
         ratingCount: map[productRatingCount],
         productDiscount: map[productPriceDiscount],
         rating: map[productRating],

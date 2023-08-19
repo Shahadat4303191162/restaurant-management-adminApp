@@ -34,79 +34,82 @@ class _LoginPageState extends State<LoginPage> {
       body: Center(
         child: Form(
           key: formKey,
-          child: ListView(
-            padding: EdgeInsets.symmetric(vertical: screenHeight*0.4,horizontal:screenWidth*0.1 ),
-            children: [
-              TextFormField(
-                controller: emailController,
-                decoration: InputDecoration(
-                  hintText: 'Email Address',
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide( width: 1,color: Theme.of(context).primaryColor),
-                    borderRadius: BorderRadius.circular(50.0),
-                  ),
-                  prefixIcon: Icon(Icons.email,
-                  color: Theme.of(context).primaryColor,),
-                  filled: true,
-                  fillColor: Colors.transparent,
-                ),
-                validator: (value){
-                  if(value == null || value.isEmpty){
-                    return 'please enter a valid email address';
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 10,),
-              TextFormField(
-                obscureText: isObscureText,
-                controller: passController,
-                decoration: InputDecoration(
-                  hintText: 'Password',//68didar524
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide( width: 1,color: Theme.of(context).primaryColor),
-                    borderRadius: BorderRadius.circular(50.0),
-                  ),
-                  prefixIcon: Icon(Icons.lock,
-                  color: Theme.of(context).primaryColor,),
-                  suffixIcon: IconButton(
-                    icon: Icon(isObscureText ? Icons.visibility_off : Icons.visibility),
-                    onPressed: (){
-                      setState(() {
-                        isObscureText = !isObscureText;
-                      });
+          child: Container(
+            width: screenWidth < 600 ? screenWidth * 1 : 400,
+            child: ListView(
+                padding: EdgeInsets.symmetric(vertical: screenHeight*0.35),
+                children: [
+                  TextFormField(
+                    controller: emailController,
+                    decoration: InputDecoration(
+                      hintText: 'Email Address',
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide( width: 1,color: Theme.of(context).primaryColor),
+                        borderRadius: BorderRadius.circular(50.0),
+                      ),
+                      prefixIcon: Icon(Icons.email,
+                      color: Theme.of(context).primaryColor,),
+                      filled: true,
+                      fillColor: Colors.transparent,
+                    ),
+                    validator: (value){
+                      if(value == null || value.isEmpty){
+                        return 'please enter a valid email address';
+                      }
+                      return null;
                     },
                   ),
-                  filled: true,
-                  fillColor: Colors.transparent,
-                ),
-                validator: (value){
-                  if(value == null || value.isEmpty){
-                    return 'please enter a valid password';
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 10,),
-              ElevatedButton(
-                  onPressed: () {
-                    authenticate();
-                  },
-                  child: const Text('LOGIN'),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Text('Forget Password',
-                    style: TextStyle(fontSize: 12),),
-                  TextButton(
-                      onPressed: (){},
-                      child: const Text('Click here....'))
+                  const SizedBox(height: 10,),
+                  TextFormField(
+                    obscureText: isObscureText,
+                    controller: passController,
+                    decoration: InputDecoration(
+                      hintText: 'Password',//68didar524
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide( width: 1,color: Theme.of(context).primaryColor),
+                        borderRadius: BorderRadius.circular(50.0),
+                      ),
+                      prefixIcon: Icon(Icons.lock,
+                      color: Theme.of(context).primaryColor,),
+                      suffixIcon: IconButton(
+                        icon: Icon(isObscureText ? Icons.visibility_off : Icons.visibility),
+                        onPressed: (){
+                          setState(() {
+                            isObscureText = !isObscureText;
+                          });
+                        },
+                      ),
+                      filled: true,
+                      fillColor: Colors.transparent,
+                    ),
+                    validator: (value){
+                      if(value == null || value.isEmpty){
+                        return 'please enter a valid password';
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 10,),
+                  ElevatedButton(
+                      onPressed: () {
+                        authenticate();
+                      },
+                      child: const Text('LOGIN'),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text('Forget Password',
+                        style: TextStyle(fontSize: 12),),
+                      TextButton(
+                          onPressed: (){},
+                          child: const Text('Click here....'))
+                    ],
+                  ),
+                  const SizedBox(height: 10,),
+                  Text(errMsg,style: TextStyle(color: Theme.of(context).errorColor),)
                 ],
               ),
-              const SizedBox(height: 10,),
-              Text(errMsg,style: TextStyle(color: Theme.of(context).errorColor),)
-            ],
           ),
         ),
       ),

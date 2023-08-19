@@ -29,9 +29,9 @@ class _NewProductPageState extends State<NewProductPage> {
   final _longDescriptionController = TextEditingController();
   final _purchasePriceController = TextEditingController();
   final _salesPriceController = TextEditingController();
+  final _sizeController = TextEditingController();
   final _discountController = TextEditingController();
   final _quantityController = TextEditingController();
-  final _sizeController = TextEditingController();
   late StreamSubscription<ConnectivityResult> subscription;
   bool _isConnected = true,isUploading = false, isSaving = false;
   String? _category;
@@ -149,26 +149,26 @@ class _NewProductPageState extends State<NewProductPage> {
                 return null;
               },
             ),
-            const SizedBox(
-              height: 10,
-            ),
-            TextFormField(
-              controller: _sizeController,
-              keyboardType: TextInputType.text,
-              decoration: InputDecoration(
-                  labelText: 'Size (optional)',
-                  prefixIcon: Icon(
-                    Icons.next_week_outlined,
-                    color: Theme.of(context).primaryColor,
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                          width: 1, color: Theme.of(context).primaryColor),
-                      borderRadius: BorderRadius.circular(20.0))),
-              validator: (value) {
-                return null;
-              },
-            ),
+            // const SizedBox(
+            //   height: 10,
+            // ),
+            // TextFormField(
+            //   controller: _sizeController,
+            //   keyboardType: TextInputType.text,
+            //   decoration: InputDecoration(
+            //       labelText: 'Size (optional)',
+            //       prefixIcon: Icon(
+            //         Icons.next_week_outlined,
+            //         color: Theme.of(context).primaryColor,
+            //       ),
+            //       enabledBorder: OutlineInputBorder(
+            //           borderSide: BorderSide(
+            //               width: 1, color: Theme.of(context).primaryColor),
+            //           borderRadius: BorderRadius.circular(20.0))),
+            //   validator: (value) {
+            //     return null;
+            //   },
+            // ),
             const SizedBox(
               height: 10,
             ),
@@ -176,7 +176,7 @@ class _NewProductPageState extends State<NewProductPage> {
               controller: _purchasePriceController,
               keyboardType: TextInputType.number,
               decoration: InputDecoration(
-                  labelText: 'Purchase Price',
+                  labelText: 'Purchase Price (Default)',
                   prefixIcon: Icon(
                     Icons.monetization_on_outlined,
                     color: Theme.of(context).primaryColor,
@@ -202,7 +202,7 @@ class _NewProductPageState extends State<NewProductPage> {
               controller: _salesPriceController,
               keyboardType: TextInputType.number,
               decoration: InputDecoration(
-                  labelText: 'Sale Price',
+                  labelText: 'Sale Price (Default)',
                   prefixIcon: Icon(
                     Icons.monetization_on,
                     color: Theme.of(context).primaryColor,
@@ -420,6 +420,7 @@ class _NewProductPageState extends State<NewProductPage> {
           shortDescription: _shortDescriptionController.text.isEmpty? null : _shortDescriptionController.text,
           longDescription: _longDescriptionController.text.isEmpty? null: _longDescriptionController.text,
           category: _category,
+          salesPrice: num.parse(_salesPriceController.text),
           productDiscount: num.parse(_discountController.text),
           stock: num.parse(_quantityController.text),
           thumbnailImageUrl: _thumbnailImageUrl,
@@ -431,7 +432,8 @@ class _NewProductPageState extends State<NewProductPage> {
             month: _purchaseDate!.month,
             year:_purchaseDate!.year,
           ),
-          quantity: num.parse(_quantityController.text)
+          quantity: num.parse(_quantityController.text),
+          price: num.parse(_purchasePriceController.text),
       );
       final diverseSelectionModel = DiverseSelectionModel(
           size: _sizeController.text.isEmpty? null :_sizeController.text,
@@ -439,7 +441,12 @@ class _NewProductPageState extends State<NewProductPage> {
           purPrice: num.parse(_purchasePriceController.text)
       );
       final catModel = context.read<ProductProvider>().getCategoryByName(_category!);
-      context.read<ProductProvider>().addProduct(productModel, purchaseModel, catModel,diverseSelectionModel).then((value) {
+      context.read<ProductProvider>().
+      addProduct(
+          productModel,
+          purchaseModel,
+          diverseSelectionModel ,
+          catModel).then((value) {
         EasyLoading.dismiss();
         setState(() {
           _namController.clear();
@@ -447,6 +454,7 @@ class _NewProductPageState extends State<NewProductPage> {
           _longDescriptionController.clear();
           _discountController.clear();
           _salesPriceController.clear();
+          _purchasePriceController.clear();
           _quantityController.clear();
           _purchaseDate = null;
           _thumbnailImageUrl = null;

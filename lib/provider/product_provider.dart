@@ -49,14 +49,17 @@ class ProductProvider extends ChangeNotifier{
   Future<void> addProduct(
       ProductModel productModel,
       PurchaseModel purchaseModel,
-      CategoryModel categoryModel,
-      DiverseSelectionModel diverseSelectionModel){
+      DiverseSelectionModel diverseSelectionModel,
+      CategoryModel categoryModel,){
     final count = categoryModel.productCount + purchaseModel.quantity;
     return DbHelper.addProduct(
         productModel,
         purchaseModel,
-        diverseSelectionModel ,
+        diverseSelectionModel,
         categoryModel.id!, count);
+  }
+  Future<void> addMultiPriceSection(DiverseSelectionModel diverseSelectionModel,String id){
+    return DbHelper.addMultiPriceSection(diverseSelectionModel, id);
   }
 
   Future<String> updateProductImage(XFile xFile) async{
@@ -89,6 +92,10 @@ class ProductProvider extends ChangeNotifier{
 
   Future<void> updateProductField(String productId,String field, dynamic value){
     return DbHelper.updateProduct(productId, {field : value});
+  }
+
+  Future<void> updateVariationPriceField(String productId,String priceVariationId,String field, dynamic value){
+    return DbHelper.updateVariationPrice(productId, priceVariationId, {field : value});
   }
 
  }

@@ -17,7 +17,16 @@ import 'package:provider/provider.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(
+      // options: FirebaseOptions(
+      //     apiKey: "AIzaSyC2Tc-qt6o8AaFHfVvmCOhzcbtCL9XMAyY",
+      //     projectId: "restsurant-management",
+      //     storageBucket: "restsurant-management.appspot.com",
+      //     messagingSenderId: "468236031580",
+      //     appId: "1:468236031580:web:bfd3e60664a6e402adf899",
+      //     measurementId: "G-8Y1VZV2GDF"
+      //     )
+  );
   runApp(MultiProvider(providers:[
     ChangeNotifierProvider(create: (context) => ProductProvider()),
   ],

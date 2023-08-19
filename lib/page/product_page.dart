@@ -14,6 +14,7 @@ class ProductPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final double screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
         title: const Text('Product List'),
@@ -30,26 +31,31 @@ class ProductPage extends StatelessWidget {
                   itemCount: provider.productList.length,
                   itemBuilder: (context, index) {
                     final product = provider.productList[index];
-                    return Card(
-                      elevation: 5,
-                      child: ListTile(
-                        onTap: () => Navigator.pushNamed(
-                            context, ProductDetailsPage.routeName,
-                            arguments: product.id),
-                        leading: CachedNetworkImage(
-                          width: 100,
-                          imageUrl: product.thumbnailImageUrl!,
-                          placeholder: (context, url) =>
-                              const CircularProgressIndicator(),
-                          errorWidget: (context, url, error) =>
-                              const Icon(Icons.error),
+                    return Padding(
+                      padding: EdgeInsets.symmetric(vertical: 0,
+                          horizontal: screenWidth > 1000 ? screenWidth * 0.3
+                              : screenWidth > 600 ? screenWidth * 0.1 : 20),
+                      child: Card(
+                        elevation: 5,
+                        child: ListTile(
+                          onTap: () => Navigator.pushNamed(
+                              context, ProductDetailsPage.routeName,
+                              arguments: product.id),
+                          leading: CachedNetworkImage(
+                            width: 100,
+                            imageUrl: product.thumbnailImageUrl!,
+                            placeholder: (context, url) =>
+                                const CircularProgressIndicator(),
+                            errorWidget: (context, url, error) =>
+                                const Icon(Icons.error),
+                          ),
+                          title: Text(product.name!),
+                          subtitle: Text('stock : ${product.stock}'),
+                          trailing: Text(
+                            '$currencysymbol ${product.salesPrice}',
+                            style: const TextStyle(color: Colors.green),
+                          ),
                         ),
-                        title: Text(product.name!),
-                        subtitle: Text('stock : ${product.stock}'),
-                        // trailing: Text(
-                        //   '$currencysymbol ${product.salesPrice}',
-                        //   style: const TextStyle(color: Colors.green),
-                        // ),
                       ),
                     );
                   },

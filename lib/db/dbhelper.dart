@@ -45,6 +45,13 @@ class DbHelper{
     return wb.commit();
   }
 
+  static Future<void> addMultiPriceSection(DiverseSelectionModel diverseSelectionModel,String id){
+    final multiPriceDoc = _db.collection(collectionProduct).doc(id).collection(collectionDiversSelection).doc();
+    diverseSelectionModel.id = multiPriceDoc.id;
+    diverseSelectionModel.productId = id;
+    return multiPriceDoc.set(diverseSelectionModel.toMap());
+  }
+
   static Stream<QuerySnapshot<Map<String,dynamic>>> getAllCategories()=>
       _db.collection(collectionCategory).snapshots();
 
@@ -59,5 +66,9 @@ class DbHelper{
 
   static Future<void> updateProduct(String id, Map<String,dynamic>map){
     return _db.collection(collectionProduct).doc(id).update(map);
+  }
+
+  static Future<void> updateVariationPrice(String id,String variationPriceId , Map<String,dynamic>map){
+    return _db.collection(collectionProduct).doc(id).collection(collectionDiversSelection).doc(variationPriceId).update(map);
   }
 }

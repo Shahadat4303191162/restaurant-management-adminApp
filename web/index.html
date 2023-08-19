@@ -31,6 +31,29 @@
 
   <title>cafe_admin</title>
   <link rel="manifest" href="manifest.json">
+  <script type="module">
+    // Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyC2Tc-qt6o8AaFHfVvmCOhzcbtCL9XMAyY",
+  authDomain: "restsurant-management.firebaseapp.com",
+  projectId: "restsurant-management",
+  storageBucket: "restsurant-management.appspot.com",
+  messagingSenderId: "468236031580",
+  appId: "1:468236031580:web:bfd3e60664a6e402adf899",
+  measurementId: "G-8Y1VZV2GDF"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
+  </script>
 
   <script>
     // The value below is injected by flutter build, do not touch.
