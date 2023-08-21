@@ -1,5 +1,6 @@
 import 'package:cafe_admin/models/category_model.dart';
 import 'package:cafe_admin/models/divers_selection_model.dart';
+import 'package:cafe_admin/models/order_constants_model.dart';
 import 'package:cafe_admin/models/product_model.dart';
 import 'package:cafe_admin/models/purchase_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -9,6 +10,8 @@ class DbHelper{
   static const String collectionCategory = 'Categories';
   static const String collectionProduct = 'Products';
   static const String collectionPurchase = 'Purchases';
+  static const String collectionSettings = 'Settings';
+  static const String documentOrderConstant = 'orderConstant';
   static const String collectionDiversSelection = 'Size Variation';
   static final FirebaseFirestore _db = FirebaseFirestore.instance;
 
@@ -52,11 +55,22 @@ class DbHelper{
     return multiPriceDoc.set(diverseSelectionModel.toMap());
   }
 
+  static Future<void> addOrderConstants(OrderConstantsModel orderConstantsModel){
+    return _db.collection(collectionSettings)
+        .doc(documentOrderConstant).set(orderConstantsModel.toMap());
+  }
+
   static Stream<QuerySnapshot<Map<String,dynamic>>> getAllCategories()=>
       _db.collection(collectionCategory).snapshots();
 
   static Stream<QuerySnapshot<Map<String,dynamic>>> getAllProducts()=>
       _db.collection(collectionProduct).snapshots();
+
+  static Stream<DocumentSnapshot<Map<String,dynamic>>> getOrderConstants()=>
+      _db.collection(collectionSettings).doc(documentOrderConstant).snapshots();
+
+  static Future<DocumentSnapshot<Map<String,dynamic>>> getOrderConstants2()=>
+      _db.collection(collectionSettings).doc(documentOrderConstant).get();
 
   static Stream<DocumentSnapshot<Map<String,dynamic>>> getProductById(String id)=>
       _db.collection(collectionProduct).doc(id).snapshots();

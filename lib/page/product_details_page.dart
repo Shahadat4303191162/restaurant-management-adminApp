@@ -25,7 +25,8 @@ class ProductDetailsPage extends StatelessWidget {
     final salePriceController = TextEditingController();
     final pid = ModalRoute.of(context)!.settings.arguments as String;
     final provider = Provider.of<ProductProvider>(context, listen: false);
-
+    Provider.of<ProductProvider>(context,listen: false).getProductByPriceVariation(pid);
+    final double screenWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
       appBar: AppBar(
@@ -37,6 +38,9 @@ class ProductDetailsPage extends StatelessWidget {
           if (snapshot.hasData) {
             final product = ProductModel.fromMap(snapshot.data!.data()!);
             return ListView(
+              padding: EdgeInsets.symmetric(vertical: 0,
+                  horizontal: screenWidth > 1000 ? screenWidth * 0.3
+                      : screenWidth > 600 ? screenWidth * 0.1 : 20),
               children: [
                 CachedNetworkImage(
                   width: 75,
@@ -155,6 +159,92 @@ class ProductDetailsPage extends StatelessWidget {
                 ExpansionTile(title: const Text('Price Variations'), children: [
                   Column(
                     children: [
+          //             ListView.builder(
+          // shrinkWrap: true,
+          // itemCount: provider.priceVariationList.length,
+          // itemBuilder: (context, index) {
+          // final priceList = provider.priceVariationList[index];
+          // return Column(
+          // children: [
+          // ListTile(
+          // title: Text('Size : ${priceList.size}'),
+          // subtitle: Text(
+          // 'Sale Price : $currencysymbol ${priceList.salePrice}',
+          // style: const TextStyle(color: Colors.green),
+          // ),
+          // trailing: IconButton(
+          // icon: const Icon(Icons.edit),
+          // onPressed: () {
+          // showDialog(
+          // context: context,
+          // builder: (BuildContext context) {
+          // return AlertDialog(
+          // title:
+          // const Text('Edit Sales Price'),
+          // content: Column(
+          // mainAxisSize: MainAxisSize.min,
+          // children: [
+          // TextField(
+          // keyboardType:
+          // TextInputType.text,
+          // controller: editingController,
+          // decoration: InputDecoration(
+          // hintText: priceList.size == null? 'Size' : priceList.size,
+          // //hintText: priceList.size,
+          // ),
+          // ),
+          // TextField(
+          // keyboardType:
+          // TextInputType.number,
+          // controller:
+          // priceEditingController,
+          // decoration: InputDecoration(
+          // hintText:
+          // '$currencysymbol ${priceList.salePrice}',
+          //
+          // ),
+          // )
+          // ],
+          // ),
+          // actions: [
+          // ElevatedButton(
+          // onPressed: () {
+          // Navigator.of(context).pop();
+          // },
+          // child: const Text('Cancel'),
+          // ),
+          // ElevatedButton(
+          // onPressed: () {
+          // provider.updateVariationPriceField(
+          // pid,
+          // priceList.id as String,
+          // diverseSelectionSize,
+          // editingController.text);
+          // provider.updateVariationPriceField(
+          // pid,
+          // priceList.id as String,
+          // diverseSelectionSalePrice,
+          // num.parse(
+          // priceEditingController
+          //     .text));
+          // provider.notifyListeners();
+          // Navigator.of(context).pop();
+          // editingController.clear();
+          // priceEditingController
+          //     .clear();
+          // },
+          // child: const Text('Save'),
+          // )
+          // ],
+          // );
+          // });
+          // },
+          // ),
+          // ),
+          // ],
+          // );
+          // },
+          // ),
                       Consumer<ProductProvider>(
                         builder: (context, provider,_) {
                           return ListView.builder(

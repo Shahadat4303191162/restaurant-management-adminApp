@@ -70,6 +70,7 @@ class _NewProductPageState extends State<NewProductPage> {
   }
   @override
   Widget build(BuildContext context) {
+    final double screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
         title: const Text('New Product'),
@@ -87,7 +88,9 @@ class _NewProductPageState extends State<NewProductPage> {
                   style: TextStyle(color: Colors.white),),
               ),
             Padding(
-              padding: const EdgeInsets.all(4.0),
+              padding: EdgeInsets.symmetric(vertical: 0,
+                  horizontal: screenWidth > 1000 ? screenWidth * 0.3
+                      : screenWidth > 600 ? screenWidth * 0.1 : 20),
               child: TextFormField(
                 controller: _namController,
                 maxLines: 1,

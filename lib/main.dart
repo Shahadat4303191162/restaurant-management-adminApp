@@ -1,5 +1,7 @@
 
+import 'package:cafe_admin/page/Vat_discount_page.dart';
 import 'package:cafe_admin/page/category_page.dart';
+import 'package:cafe_admin/page/coustomizable_product.dart';
 import 'package:cafe_admin/page/dashbord_page.dart';
 import 'package:cafe_admin/page/launcher_page.dart';
 import 'package:cafe_admin/page/login_page.dart';
@@ -9,6 +11,7 @@ import 'package:cafe_admin/page/product_details_page.dart';
 import 'package:cafe_admin/page/product_page.dart';
 import 'package:cafe_admin/page/sales_page.dart';
 import 'package:cafe_admin/page/settings_page.dart';
+import 'package:cafe_admin/provider/order_provider.dart';
 import 'package:cafe_admin/provider/product_provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -29,6 +32,7 @@ void main() async{
   );
   runApp(MultiProvider(providers:[
     ChangeNotifierProvider(create: (context) => ProductProvider()),
+    ChangeNotifierProvider(create: (context) => OrderProvider()),
   ],
       child: const MyApp()));
 }
@@ -53,12 +57,14 @@ class MyApp extends StatelessWidget {
         LoginPage.routeName: (_) => LoginPage(),
         DashboardPage.routeName:(_) => DashboardPage(),
         ProductPage.routeName: (_) => ProductPage(),
-        ProductDetailsPage.routeName: (_) => ProductDetailsPage(),
+        ProductDetailsPage.routeName: (_) => const ProductDetailsPage(),
         CategoryPage.routeName: (_) => CategoryPage(),
         SettingsPage.routeName: (_) => SettingsPage(),
         OrderPage.routeName: (_) => OrderPage(),
         SalesPage.routeName: (_) => SalesPage(),
         NewProductPage.routeName: (_) => NewProductPage(),
+        Vat_DiscountPage.routeName: (_) => Vat_DiscountPage(),
+        CustomizeProduct.routeName: (_) => CustomizeProduct(),
       },
     );
   }
