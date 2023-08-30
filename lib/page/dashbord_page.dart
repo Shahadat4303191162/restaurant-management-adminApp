@@ -1,4 +1,5 @@
 import 'package:cafe_admin/models/dashboard_item_model.dart';
+import 'package:cafe_admin/notification_services.dart';
 import 'package:cafe_admin/page/category_page.dart';
 import 'package:cafe_admin/page/order_list_page.dart';
 import 'package:cafe_admin/page/product_page.dart';
@@ -17,6 +18,15 @@ class DashboardPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //NotificationServices notificationServices = NotificationServices();
+    // notificationServices.firebaseInit(context);
+    // notificationServices.requestNotificationPermission();
+    //
+    // //notificationServices.isTokenRefresh();
+    // notificationServices.getDeviceToken().then((value) {
+    //   print('Device token');
+    //   print(value);
+    // });
     final double screenWidth = MediaQuery.of(context).size.width;
     final int crossAxisCount = screenWidth >800 ? 3 : 2;
     Provider.of<ProductProvider>(context, listen: false).getAllCategories();

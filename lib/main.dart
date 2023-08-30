@@ -1,4 +1,5 @@
 
+import 'package:cafe_admin/notification_services.dart';
 import 'package:cafe_admin/page/Vat_discount_page.dart';
 import 'package:cafe_admin/page/category_page.dart';
 import 'package:cafe_admin/page/coustomizable_product.dart';
@@ -30,6 +31,8 @@ void main() async{
       //     measurementId: "G-8Y1VZV2GDF"
       //     )
   );
+  GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+  await NotificationServices(navigatorKey.currentContext!).initNotifications();
   runApp(MultiProvider(providers:[
     ChangeNotifierProvider(create: (context) => ProductProvider()),
     ChangeNotifierProvider(create: (context) => OrderProvider()),

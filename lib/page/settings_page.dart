@@ -12,6 +12,13 @@ class SettingsPage extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Settings'),
       ),
+      body: Center(
+        child: Column(
+          children: [
+
+          ],
+        ),
+      ),
     );
   }
 }
