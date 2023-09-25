@@ -1,6 +1,6 @@
 import 'package:cafe_admin/auth/auth_services.dart';
 import 'package:cafe_admin/page/dashbord_page.dart';
-import 'package:cafe_admin/page/login_page.dart';
+import 'package:cafe_admin/src/features/login/presentation/page/login_page.dart';
 import 'package:flutter/material.dart';
 
 class LauncherPage extends StatefulWidget {

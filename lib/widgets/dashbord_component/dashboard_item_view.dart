@@ -1,9 +1,9 @@
-import 'package:cafe_admin/models/dashboard_item_model.dart';
+import 'package:cafe_admin/models/drawer_list_tile_model.dart';
 import 'package:flutter/material.dart';
 
 class DashboardItemView extends StatelessWidget {
 
-  final DashboardItem item;
+  final DrawerListTileModel item;
   final Function(String) onPressed;
 
   const DashboardItemView({

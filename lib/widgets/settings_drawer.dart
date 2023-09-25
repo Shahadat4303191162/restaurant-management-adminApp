@@ -1,13 +1,18 @@
 import 'package:cafe_admin/page/Vat_discount_page.dart';
 import 'package:cafe_admin/page/coustomizable_product.dart';
+import 'package:cafe_admin/page/dashbord_page.dart';
 import 'package:flutter/material.dart';
 
 class SettingsDrawer extends StatelessWidget {
   const SettingsDrawer({super.key});
 
+
+
   @override
   Widget build(BuildContext context) {
-    return Drawer(
+    return
+
+      Drawer(
       child: ListView(
         children: [
           Container(
@@ -23,6 +28,11 @@ class SettingsDrawer extends StatelessWidget {
             onTap: () => Navigator.pushReplacementNamed(context, CustomizeProduct.routeName),
             leading: const Icon(Icons.edit),
             title: const Text('Customizable Product'),
+          ),
+          ListTile(
+            onTap: () => Navigator.pushReplacementNamed(context, DashboardPage.routeName),
+            leading: const Icon(Icons.exit_to_app),
+            title: const Text('Go to Dash Bord'),
           ),
         ],
       ),
