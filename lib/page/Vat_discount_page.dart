@@ -1,7 +1,6 @@
 import 'package:cafe_admin/models/order_constants_model.dart';
 import 'package:cafe_admin/provider/order_provider.dart';
 import 'package:cafe_admin/utils/helper_function.dart';
-import 'package:cafe_admin/widgets/settings_drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:provider/provider.dart';
@@ -37,7 +36,6 @@ class _Vat_DiscountPageState extends State<Vat_DiscountPage> {
   Widget build(BuildContext context) {
     final double screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
-      drawer: const SettingsDrawer(),
       appBar: AppBar(
         title: const Text('Vat & discount'),
       ),

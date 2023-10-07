@@ -11,8 +11,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
+import 'package:image_picker_web/image_picker_web.dart';
 
 import '../models/date_model.dart';
+import '../utils/constants.dart';
+import '../widgets/responsive.dart';
 
 class NewProductPage extends StatefulWidget {
   static const String routeName = '/new_product';
@@ -73,6 +76,7 @@ class _NewProductPageState extends State<NewProductPage> {
     final double screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         title: const Text('New Product'),
 
       ),
@@ -87,288 +91,395 @@ class _NewProductPageState extends State<NewProductPage> {
                 title: Text('NO internet connectivity',
                   style: TextStyle(color: Colors.white),),
               ),
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 0,
-                  horizontal: screenWidth > 1000 ? screenWidth * 0.3
-                      : screenWidth > 600 ? screenWidth * 0.1 : 20),
-              child: TextFormField(
-                controller: _namController,
-                maxLines: 1,
-                decoration: InputDecoration(
-                  labelText: 'Product Name',
-                  prefixIcon: Icon(Icons.drive_file_rename_outline,
-                    color: Theme.of(context).primaryColor,
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide( width: 1,color: Theme.of(context).primaryColor),
-                    borderRadius: BorderRadius.circular(20.0),
-                  ),
-                ),
-                validator: (value){
-                  if(value == null || value.isEmpty){
-                    return 'This field must not be empty';
-                  }else{
-                    return null;
-                  }
-                },
-              ),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            TextFormField(
-              maxLines: 2,
-              controller: _shortDescriptionController,
-              decoration: InputDecoration(
-                labelText: 'Enter short Description(optional)',
-                prefixIcon: Icon(Icons.short_text,
-                color: Theme.of(context).primaryColor),
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide( width: 1,color: Theme.of(context).primaryColor),
-                  borderRadius: BorderRadius.circular(20.0),
-                ),
 
-              ),
-              validator: (value){
-                return null;
-              },
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            TextFormField(
-              maxLines: 3,
-              controller: _longDescriptionController,
-              decoration: InputDecoration(
-                labelText: 'Enter Long Description (optional)',
-                prefixIcon: Icon(Icons.description,
-                color: Theme.of(context).primaryColor,),
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(width: 1,color: Theme.of(context).primaryColor),
-                  borderRadius: BorderRadius.circular(20.0)
-                )
-              ),
-              validator: (value){
-                return null;
-              },
-            ),
-            // const SizedBox(
-            //   height: 10,
-            // ),
-            // TextFormField(
-            //   controller: _sizeController,
-            //   keyboardType: TextInputType.text,
-            //   decoration: InputDecoration(
-            //       labelText: 'Size (optional)',
-            //       prefixIcon: Icon(
-            //         Icons.next_week_outlined,
-            //         color: Theme.of(context).primaryColor,
-            //       ),
-            //       enabledBorder: OutlineInputBorder(
-            //           borderSide: BorderSide(
-            //               width: 1, color: Theme.of(context).primaryColor),
-            //           borderRadius: BorderRadius.circular(20.0))),
-            //   validator: (value) {
-            //     return null;
-            //   },
-            // ),
-            const SizedBox(
-              height: 10,
-            ),
-            TextFormField(
-              controller: _purchasePriceController,
-              keyboardType: TextInputType.number,
-              decoration: InputDecoration(
-                  labelText: 'Purchase Price (Default)',
-                  prefixIcon: Icon(
-                    Icons.monetization_on_outlined,
-                    color: Theme.of(context).primaryColor,
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                          width: 1, color: Theme.of(context).primaryColor),
-                      borderRadius: BorderRadius.circular(20.0))),
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'This field must not be empty';
-                }
-                if (num.parse(value) <= 0) {
-                  return 'Purchase Price should be greater than 0';
-                }
-                return null;
-              },
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            TextFormField(
-              controller: _salesPriceController,
-              keyboardType: TextInputType.number,
-              decoration: InputDecoration(
-                  labelText: 'Sale Price (Default)',
-                  prefixIcon: Icon(
-                    Icons.monetization_on,
-                    color: Theme.of(context).primaryColor,
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                          width: 1, color: Theme.of(context).primaryColor),
-                      borderRadius: BorderRadius.circular(20.0))),
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'This field must not be empty';
-                }
-                if (num.parse(value) <= 0) {
-                  return 'Sale Price should be greater than 0';
-                }
-                return null;
-              },
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            TextFormField(
-              controller: _quantityController,
-              keyboardType: TextInputType.number,
-              decoration: InputDecoration(
-                  labelText: 'Quantity',
-                  prefixIcon: Icon(Icons.numbers,
-                    color: Theme.of(context).primaryColor,),
-                  enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(width: 1,color: Theme.of(context).primaryColor),
-                      borderRadius: BorderRadius.circular(20.0)
-                  )
-              ),
-              validator: (value){
-                if(value == null || value.isEmpty){
-                  return 'This field must not be empty';
-                }
-                if(num.parse(value)<= 0){
-                  return 'Quantity should be greater than 0';
-                }
-                return null;
-              },
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            TextFormField(
-              controller: _discountController,
-              keyboardType: TextInputType.number,
-              decoration: InputDecoration(
-                  labelText: 'Discount',
-                  prefixIcon: Icon(Icons.discount,
-                    color: Theme.of(context).primaryColor,),
-                  enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(width: 1,color: Theme.of(context).primaryColor),
-                      borderRadius: BorderRadius.circular(20.0)
-                  )
-              ),
-              validator: (value){
-                if(value == null || value.isEmpty){
-                  return 'This field must not be empty';
-                }
-                if(num.parse(value) < 0){
-                  return 'Discount should not be a negative value';
-                }
-                if(num.parse(value) > 80){
-                  return 'Discount amounts of up to 80%';
-                }
-                return null;
-              },
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            Consumer<ProductProvider>(
-                builder: (context, provider, _) =>
-                    DropdownButtonFormField<String>(
-                      onChanged: (value){
-                        setState(() {
-                          _category = value;
-                        });
-                      },
-                      hint: const Text('select category'),
-                      value: _category,
-                      items: provider.categoryList.map((model) => DropdownMenuItem<String>(
-                          value: model.name,
-                          child: Text(model.name!),
-                        )).toList(),
-                    )
-              ),
-            const SizedBox(
-              height: 10,
-            ),
-              Card(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    TextButton(
-                        onPressed: _selectDate,
-                        child: const Text('Select Purchase Date'),),
-                    Text(_purchaseDate == null ? 'No Date Chosen' : getFormattedTime(_purchaseDate!, 'dd/MM/yyyy'))
-                  ],
-                ),
-              ),
-            // const SizedBox(
-            //   height: 10,
-            // ),
-              Center(
-                child: Card(
-                  elevation: 5,
-                  child: Padding(
-                    padding: EdgeInsets.all(0.0),
-                    child: _thumbnailImageUrl == null ?
-                        isUploading ?
-                            const Center(child: CircularProgressIndicator() ,) :
-                    Image.asset(
-                      'images/placeholder.jpg',
-                      width: 100,
-                      height: 100,
-                      fit: BoxFit.cover,
-                    )
-                        : FadeInImage.assetNetwork(
-                        placeholder: 'images/loading.gif',
-                        image: _thumbnailImageUrl!,
-                        fadeInDuration: const Duration(seconds: 1),
-                        fadeInCurve: Curves.bounceInOut,
-                        width: 100,
-                        height: 100,
-                        fit: BoxFit.cover,
-                    )
-                  ),
-                ),
-              ),
-            const SizedBox(
-              height: 10,
-            ),
             Row(
-              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                ElevatedButton(
-                    onPressed: (){
-                      _imageSource = ImageSource.camera;
-                      _getImage();
-                    },
-                    child: const Text('Camera'),
+                Expanded(
+                  flex: 5,
+                  child: Column(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(appPadding),
+                        decoration: const BoxDecoration(
+                          color: skyBlue,
+                          borderRadius: BorderRadius.all(Radius.circular(20)),
+                        ),
+                        child: Column(
+                          children: [
+                            TextFormField(
+                              controller: _namController,
+                              maxLines: 1,
+                              decoration: InputDecoration(
+                                labelText: 'Product Name',
+                                prefixIcon: Icon(Icons.drive_file_rename_outline,
+                                  color: Theme.of(context).primaryColor,
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide( width: 1,color: Theme.of(context).primaryColor),
+                                  borderRadius: BorderRadius.circular(20.0),
+                                ),
+                              ),
+                              validator: (value){
+                                if(value == null || value.isEmpty){
+                                  return 'This field must not be empty';
+                                }else{
+                                  return null;
+                                }
+                              },
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            TextFormField(
+                              maxLines: 2,
+                              controller: _shortDescriptionController,
+                              decoration: InputDecoration(
+                                labelText: 'Enter short Description(optional)',
+                                prefixIcon: Icon(Icons.short_text,
+                                    color: Theme.of(context).primaryColor),
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide( width: 1,color: Theme.of(context).primaryColor),
+                                  borderRadius: BorderRadius.circular(20.0),
+                                ),
+
+                              ),
+                              validator: (value){
+                                return null;
+                              },
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            TextFormField(
+                              maxLines: 3,
+                              controller: _longDescriptionController,
+                              decoration: InputDecoration(
+                                  labelText: 'Enter Long Description (optional)',
+                                  prefixIcon: Icon(Icons.description,
+                                    color: Theme.of(context).primaryColor,),
+                                  enabledBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(width: 1,color: Theme.of(context).primaryColor),
+                                      borderRadius: BorderRadius.circular(20.0)
+                                  )
+                              ),
+                              validator: (value){
+                                return null;
+                              },
+                            ),
+                            // const SizedBox(
+                            //   height: 10,
+                            // ),
+                            // TextFormField(
+                            //   controller: _sizeController,
+                            //   keyboardType: TextInputType.text,
+                            //   decoration: InputDecoration(
+                            //       labelText: 'Size (optional)',
+                            //       prefixIcon: Icon(
+                            //         Icons.next_week_outlined,
+                            //         color: Theme.of(context).primaryColor,
+                            //       ),
+                            //       enabledBorder: OutlineInputBorder(
+                            //           borderSide: BorderSide(
+                            //               width: 1, color: Theme.of(context).primaryColor),
+                            //           borderRadius: BorderRadius.circular(20.0))),
+                            //   validator: (value) {
+                            //     return null;
+                            //   },
+                            // ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            TextFormField(
+                              controller: _purchasePriceController,
+                              keyboardType: TextInputType.number,
+                              decoration: InputDecoration(
+                                  labelText: 'Purchase Price (Default)',
+                                  prefixIcon: Icon(
+                                    Icons.monetization_on_outlined,
+                                    color: Theme.of(context).primaryColor,
+                                  ),
+                                  enabledBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                          width: 1, color: Theme.of(context).primaryColor),
+                                      borderRadius: BorderRadius.circular(20.0))),
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'This field must not be empty';
+                                }
+                                if (num.parse(value) <= 0) {
+                                  return 'Purchase Price should be greater than 0';
+                                }
+                                return null;
+                              },
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            TextFormField(
+                              controller: _salesPriceController,
+                              keyboardType: TextInputType.number,
+                              decoration: InputDecoration(
+                                  labelText: 'Sale Price (Default)',
+                                  prefixIcon: Icon(
+                                    Icons.monetization_on,
+                                    color: Theme.of(context).primaryColor,
+                                  ),
+                                  enabledBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                          width: 1, color: Theme.of(context).primaryColor),
+                                      borderRadius: BorderRadius.circular(20.0))),
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'This field must not be empty';
+                                }
+                                if (num.parse(value) <= 0) {
+                                  return 'Sale Price should be greater than 0';
+                                }
+                                return null;
+                              },
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            TextFormField(
+                              controller: _quantityController,
+                              keyboardType: TextInputType.number,
+                              decoration: InputDecoration(
+                                  labelText: 'Quantity',
+                                  prefixIcon: Icon(Icons.numbers,
+                                    color: Theme.of(context).primaryColor,),
+                                  enabledBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(width: 1,color: Theme.of(context).primaryColor),
+                                      borderRadius: BorderRadius.circular(20.0)
+                                  )
+                              ),
+                              validator: (value){
+                                if(value == null || value.isEmpty){
+                                  return 'This field must not be empty';
+                                }
+                                if(num.parse(value)<= 0){
+                                  return 'Quantity should be greater than 0';
+                                }
+                                return null;
+                              },
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            TextFormField(
+                              controller: _discountController,
+                              keyboardType: TextInputType.number,
+                              decoration: InputDecoration(
+                                  labelText: 'Discount',
+                                  prefixIcon: Icon(Icons.discount,
+                                    color: Theme.of(context).primaryColor,),
+                                  enabledBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(width: 1,color: Theme.of(context).primaryColor),
+                                      borderRadius: BorderRadius.circular(20.0)
+                                  )
+                              ),
+                              validator: (value){
+                                if(value == null || value.isEmpty){
+                                  return 'This field must not be empty';
+                                }
+                                if(num.parse(value) < 0){
+                                  return 'Discount should not be a negative value';
+                                }
+                                if(num.parse(value) > 80){
+                                  return 'Discount amounts of up to 80%';
+                                }
+                                return null;
+                              },
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Consumer<ProductProvider>(
+                                builder: (context, provider, _) =>
+                                    DropdownButtonFormField<String>(
+                                      onChanged: (value){
+                                        setState(() {
+                                          _category = value;
+                                        });
+                                      },
+                                      hint: const Text('select category'),
+                                      value: _category,
+                                      items: provider.categoryList.map((model) => DropdownMenuItem<String>(
+                                        value: model.name,
+                                        child: Text(model.name!),
+                                      )).toList(),
+                                    )
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Card(
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  TextButton(
+                                    onPressed: _selectDate,
+                                    child: const Text('Select Purchase Date'),),
+                                  Text(_purchaseDate == null ? 'No Date Chosen' : getFormattedTime(_purchaseDate!, 'dd/MM/yyyy'))
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      if(Responsive.isMobile(context))
+                        SizedBox(height: appPadding,),
+                      if(Responsive.isMobile(context))
+                        Container(
+                          padding: const EdgeInsets.all(appPadding),
+                          decoration: const BoxDecoration(
+                            color: skyBlue,
+                            borderRadius: BorderRadius.all(Radius.circular(20)),
+                          ),
+                          child: Column(
+                            children: [
+                              Center(
+                                child: Card(
+                                  elevation: 5,
+                                  child: Padding(
+                                      padding: EdgeInsets.all(0.0),
+                                      child: _thumbnailImageUrl == null ?
+                                      isUploading ?
+                                      const Center(child: CircularProgressIndicator() ,) :
+                                      Image.asset(
+                                        'images/placeholder.jpg',
+                                        width: 300,
+                                        height: 300,
+                                        fit: BoxFit.cover,
+                                      )
+                                          : FadeInImage.assetNetwork(
+                                        placeholder: 'images/loading.gif',
+                                        image: _thumbnailImageUrl!,
+                                        fadeInDuration: const Duration(seconds: 1),
+                                        fadeInCurve: Curves.bounceInOut,
+                                        width: 300,
+                                        height: 300,
+                                        fit: BoxFit.cover,
+                                      )
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  ElevatedButton(
+                                    onPressed: (){
+                                      _imageSource = ImageSource.camera;
+                                      _getImage();
+                                    },
+                                    child: const Text('Camera'),
+                                  ),
+                                  const SizedBox(
+                                    width: 20,
+                                  ),
+                                  ElevatedButton(
+                                    onPressed: (){
+                                      _imageSource = ImageSource.gallery;
+                                      _getImage();
+                                    },
+                                    child: const Text('Gallery'),)
+                                ],
+                              ),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              ElevatedButton(
+                                  onPressed: isUploading ? null : _saveProduct,
+                                  child: const Text('SAVE'))
+                            ],
+                          ),
+                        ),
+                    ],
+                  ),
                 ),
-                const SizedBox(
-                  width: 20,
-                ),
-                ElevatedButton(
-                    onPressed: (){
-                      _imageSource = ImageSource.gallery;
-                      _getImage();
-                    },
-                    child: const Text('Gallery'),)
+                if(!Responsive.isMobile(context))
+                  SizedBox(width: appPadding),
+                if(!Responsive.isMobile(context))
+                  Expanded(
+                      flex: 5,
+                      child: Container(
+                        padding: const EdgeInsets.all(appPadding),
+                        decoration: const BoxDecoration(
+                          color: skyBlue,
+                          borderRadius: BorderRadius.all(Radius.circular(20)),
+                        ),
+                        child: Column(
+                          children: [
+                            Center(
+                              child: Card(
+                                elevation: 5,
+                                child: Padding(
+                                    padding: EdgeInsets.all(0.0),
+                                    child: _thumbnailImageUrl == null ?
+                                    isUploading ?
+                                    const Center(child: CircularProgressIndicator() ,) :
+                                    Image.asset(
+                                      'images/placeholder.jpg',
+                                      width: 300,
+                                      height: 300,
+                                      fit: BoxFit.cover,
+                                    )
+                                        : FadeInImage.assetNetwork(
+                                      placeholder: 'images/loading.gif',
+                                      image: _thumbnailImageUrl!,
+                                      fadeInDuration: const Duration(seconds: 1),
+                                      fadeInCurve: Curves.bounceInOut,
+                                      width: 300,
+                                      height: 300,
+                                      fit: BoxFit.cover,
+                                    )
+                                ),
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                // ElevatedButton(
+                                //   onPressed: (){
+                                //     _imageSource = ImageSource.camera;
+                                //     _getImage();
+                                //   },
+                                //   child: const Text('Camera'),
+                                // ),
+                                // const SizedBox(
+                                //   width: 20,
+                                // ),
+                                ElevatedButton(
+                                  onPressed: (){
+                                    _imageSource = ImageSource.gallery;
+                                    _getImage();
+                                  },
+                                  child: const Text('Add Image'),)
+                              ],
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            ElevatedButton(
+                                onPressed: isUploading ? null : _saveProduct,
+                                child: const Text('SAVE'))
+                          ],
+                        ),
+                      ),
+                  )
               ],
             ),
-            const SizedBox(
-              height: 10,
-            ),
-            ElevatedButton(
-                onPressed: isUploading ? null : _saveProduct,
-                child: const Text('SAVE'))
+
+            // const SizedBox(
+            //   height: 10,
+            // ),
+
           ],
         ),
       ),
@@ -389,7 +500,7 @@ class _NewProductPageState extends State<NewProductPage> {
   }
 
   void _getImage() async{
-    final selectedImage = await ImagePicker().pickImage(source: _imageSource,imageQuality: 75);
+    final selectedImage = await ImagePickerWeb.getImageInfo;
     if(selectedImage != null){
       setState(() {
         isUploading = true;
@@ -401,7 +512,7 @@ class _NewProductPageState extends State<NewProductPage> {
           isUploading = false;
         });
       }catch(e){
-
+        print(e);
       }
     }
 

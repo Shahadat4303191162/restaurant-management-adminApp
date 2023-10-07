@@ -15,6 +15,8 @@ import '../widgets/dashbord_component/drawer_list_tile_view.dart';
 import '../widgets/dashbord_component/header.dart';
 import '../provider/product_provider.dart';
 import '../widgets/responsive.dart';
+import 'Vat_discount_page.dart';
+import 'new_product_page.dart';
 
 class DashboardPage extends StatefulWidget {
   static const String routeName = '/dashboard';
@@ -122,14 +124,18 @@ class _DashboardPageState extends State<DashboardPage> {
         return DashboardContent(); // Replace with your DashboardPage widget
       case DrawerListTileModel.order:
         return OrderPage(); // Replace with your OrderPage widget
-      case DrawerListTileModel.overView:
+      case DrawerListTileModel.product_list:
         return ProductPage(); // Replace with your ProductPage widget
       case DrawerListTileModel.category:
-        return CategoryPage(); // Replace with your CategoryPage widget
+        return CategoryPage();
+      case DrawerListTileModel.addMenu:
+        return NewProductPage();// Replace with your CategoryPage widget
       case DrawerListTileModel.sales:
         return SalesPage(); // Replace with your SalesPage widget
       case DrawerListTileModel.setting:
-        return SettingsPage(); // Replace with your SettingsPage widget
+        return SettingsPage();
+      case DrawerListTileModel.vatDiscount:
+        return Vat_DiscountPage();// Replace with your SettingsPage widget
       case DrawerListTileModel.report:
         return ReportPage(); // Replace with your ReportPage widget
       default:
@@ -147,7 +153,7 @@ class _DashboardPageState extends State<DashboardPage> {
       case DrawerListTileModel.order :
         route = OrderPage.routeName;
         break;
-      case DrawerListTileModel.overView :
+      case DrawerListTileModel.product_list :
         route = ProductPage.routeName;
         break;
       case DrawerListTileModel.category :
@@ -167,16 +173,5 @@ class _DashboardPageState extends State<DashboardPage> {
   }
 }
 
-// Widget updateSelectedPage(String value){
-//   switch(value){
-//     case DashboardPage.routeName:
-//       return DashboardContent();
-//     case ProductPage.routeName:
-//       return ProductPage();
-//     case CategoryPage.routeName:
-//       return CategoryPage();
-//     default:
-//       return DashboardContent();
-//   }
-// }
+
 

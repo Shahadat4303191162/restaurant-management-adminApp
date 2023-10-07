@@ -1,5 +1,4 @@
 import 'package:cafe_admin/provider/product_provider.dart';
-import 'package:cafe_admin/widgets/settings_drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -11,7 +10,6 @@ class CustomizeProduct extends StatelessWidget {
   Widget build(BuildContext context) {
     final double screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
-      drawer: const SettingsDrawer(),
       appBar: AppBar(
         title: const Text('Customize'),
       ),

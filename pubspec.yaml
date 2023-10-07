@@ -48,6 +48,7 @@ dependencies:
   sidebarx:
   intl:
   image_picker:
+  image_picker_web:
   flutter_easyloading:
   connectivity_plus:
   cached_network_image:
