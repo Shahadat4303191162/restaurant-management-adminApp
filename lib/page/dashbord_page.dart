@@ -6,6 +6,7 @@ import 'package:cafe_admin/page/product_page.dart';
 import 'package:cafe_admin/page/report_page.dart';
 import 'package:cafe_admin/page/sales_page.dart';
 import 'package:cafe_admin/page/settings_page.dart';
+import 'package:cafe_admin/page/table_number_page.dart';
 import 'package:cafe_admin/utils/constants.dart';
 import 'package:cafe_admin/utils/controller.dart';
 import 'package:cafe_admin/page/dashboard_content.dart';
@@ -48,6 +49,7 @@ class _DashboardPageState extends State<DashboardPage> {
         .width;
     final int crossAxisCount = screenWidth > 800 ? 3 : 2;
     Provider.of<ProductProvider>(context, listen: false).getAllCategories();
+    Provider.of<ProductProvider>(context,listen: false).getAllTableValue();
     Provider.of<ProductProvider>(context, listen: false).getAllProducts();
     return Scaffold(
 
@@ -136,6 +138,8 @@ class _DashboardPageState extends State<DashboardPage> {
         return SettingsPage();
       case DrawerListTileModel.vatDiscount:
         return Vat_DiscountPage();// Replace with your SettingsPage widget
+      case DrawerListTileModel.tableNumber:
+        return TableNumberPage();
       case DrawerListTileModel.report:
         return ReportPage(); // Replace with your ReportPage widget
       default:
@@ -158,6 +162,9 @@ class _DashboardPageState extends State<DashboardPage> {
         break;
       case DrawerListTileModel.category :
         route = CategoryPage.routeName;
+        break;
+      case DrawerListTileModel.addMenu :
+        route = NewProductPage.routeName;
         break;
       case DrawerListTileModel.sales :
         route = SalesPage.routeName;

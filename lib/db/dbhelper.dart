@@ -1,8 +1,10 @@
+import 'package:cafe_admin/models/add_user_model.dart';
 import 'package:cafe_admin/models/category_model.dart';
 import 'package:cafe_admin/models/divers_selection_model.dart';
 import 'package:cafe_admin/models/order_constants_model.dart';
 import 'package:cafe_admin/models/product_model.dart';
 import 'package:cafe_admin/models/purchase_model.dart';
+import 'package:cafe_admin/models/table_number_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class DbHelper{
@@ -11,6 +13,8 @@ class DbHelper{
   static const String collectionProduct = 'Products';
   static const String collectionPurchase = 'Purchases';
   static const String collectionSettings = 'Settings';
+  static const String collectionTable = 'Table';
+  static const String collectionUsers = 'Users';
   static const String documentOrderConstant = 'orderConstant';
   static const String collectionDiversSelection = 'Size Variation';
   static final FirebaseFirestore _db = FirebaseFirestore.instance;
@@ -24,6 +28,18 @@ class DbHelper{
     final doc = _db.collection(collectionCategory).doc();
     categoryModel.id = doc.id;
     return doc.set(categoryModel.toMap());
+  }
+
+  static Future<void> addTable(TableModel tableModel){
+    final doc = _db.collection(collectionTable).doc();
+    tableModel.id = doc.id;
+    return doc.set(tableModel.toMap());
+  }
+
+  static Future<void> addUser(UserModel userModel){
+    final doc = _db.collection(collectionUsers).doc();
+    userModel.id = doc.id;
+    return doc.set(userModel.toMap());
   }
 
   static Future<void> addProduct(
@@ -62,6 +78,9 @@ class DbHelper{
 
   static Stream<QuerySnapshot<Map<String,dynamic>>> getAllCategories()=>
       _db.collection(collectionCategory).snapshots();
+
+  static Stream<QuerySnapshot<Map<String,dynamic>>> getAllTableValue()=>
+    _db.collection(collectionTable).snapshots();
 
   static Stream<QuerySnapshot<Map<String,dynamic>>> getAllProducts()=>
       _db.collection(collectionProduct).snapshots();

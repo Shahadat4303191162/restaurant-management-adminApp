@@ -1,8 +1,11 @@
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:cafe_admin/db/dbhelper.dart';
+import 'package:cafe_admin/models/add_user_model.dart';
 import 'package:cafe_admin/models/purchase_model.dart';
 import 'package:cafe_admin/models/divers_selection_model.dart';
+import 'package:cafe_admin/models/table_number_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -15,6 +18,7 @@ class ProductProvider extends ChangeNotifier{
 
   List<ProductModel> productList = []; //collection
   List<CategoryModel> categoryList = [];
+  List<TableModel> tableList = [];
   List<DiverseSelectionModel> priceVariationList = [];
 
 
@@ -27,10 +31,18 @@ class ProductProvider extends ChangeNotifier{
     });
   }
 
-  Future<String> updateCatImage(XFile file) async{
+  getAllTableValue(){
+    DbHelper.getAllTableValue().listen((snapshot) {
+      tableList = List.generate(snapshot.docs.length, (index) =>
+      TableModel.fromMap(snapshot.docs[index].data()));
+      notifyListeners();
+    });
+  }
+
+  Future<String> updateCatImage(Uint8List uint8list) async{
     final imageName = 'Image_${DateTime.now().microsecondsSinceEpoch}';
     final photoRef = FirebaseStorage.instance.ref().child('CategoryPictures/$imageName');
-    final task = photoRef.putFile(File(file.path));
+    final task = photoRef.putData(uint8list);
     final snapshot = await task.whenComplete(() => null);
     return snapshot.ref.getDownloadURL();
   }
@@ -40,6 +52,15 @@ class ProductProvider extends ChangeNotifier{
   }
 
   //category section end
+
+
+  Future<void> addTable(TableModel tableModel) {
+    return DbHelper.addTable(tableModel);
+  }
+
+  Future<void> addUser(UserModel userModel) {
+    return DbHelper.addUser(userModel);
+  }
 
   CategoryModel getCategoryByName (String name){
     final model = categoryList.firstWhere((element) => element.name == name);
@@ -62,12 +83,22 @@ class ProductProvider extends ChangeNotifier{
     return DbHelper.addMultiPriceSection(diverseSelectionModel, id);
   }
 
-  Future<String> updateProductImage(XFile xFile) async{
+  Future<String?> updateProductImage(Uint8List uint8list) async{
     final imageName = 'productImage_${DateTime.now().microsecondsSinceEpoch}';
     final photoRaf = FirebaseStorage.instance.ref().child('ProductPicture/$imageName');
-    final task = photoRaf.putFile(File(xFile.path));
-    final snapshot = await task.whenComplete(() => null);
-    return snapshot.ref.getDownloadURL();
+    final uploadTask = photoRaf.putData(uint8list);
+    // final task = photoRaf.putFile(File(xFile.path));
+    // final snapshot = await task.whenComplete(() => null);
+    // final snapshot = await uploadTask.whenComplete(() => null);
+    // return snapshot.ref.getDownloadURL();
+    try {
+      final snapshot = await uploadTask.whenComplete(() => null);
+      final downloadURL = await snapshot.ref.getDownloadURL();
+      return downloadURL;
+    } catch (e) {
+      print('Error uploading image: $e');
+      return null; // Handle the error as needed in your UI
+    }
   }
   
   getAllProducts(){

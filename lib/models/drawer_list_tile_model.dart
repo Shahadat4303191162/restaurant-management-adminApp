@@ -22,6 +22,7 @@ class DrawerListTileModel{
   static const String sales = 'Sales';
   static const String setting = 'Setting';
   static const String vatDiscount = 'Vat_Discount';
+  static const String tableNumber = 'Table_Number';
   static const String report = 'Report';
 
  }
@@ -53,6 +54,9 @@ class DrawerListTileModel{
       DrawerListTileModel(
           icon: Icons.discount,
           title: DrawerListTileModel.vatDiscount),
+      DrawerListTileModel(
+          icon: Icons.table_bar,
+          title: DrawerListTileModel.tableNumber),
     ]
    ),
    DrawerListTileModel(icon: Icons.area_chart, title: DrawerListTileModel.report),

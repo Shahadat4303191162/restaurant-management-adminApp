@@ -65,10 +65,6 @@ class ProductPage extends StatelessWidget {
                     },
                   )),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => Navigator.pushNamed(context, NewProductPage.routeName),
-        child: const Icon(Icons.add),
-      ),
     );
   }
 }

@@ -5,6 +5,7 @@ import 'package:cafe_admin/page/category_page.dart';
 import 'package:cafe_admin/page/coustomizable_product.dart';
 import 'package:cafe_admin/page/dashbord_page.dart';
 import 'package:cafe_admin/page/launcher_page.dart';
+import 'package:cafe_admin/page/table_number_page.dart';
 import 'package:cafe_admin/src/features/login/presentation/page/login_page.dart';
 import 'package:cafe_admin/page/new_product_page.dart';
 import 'package:cafe_admin/page/order_list_page.dart';
@@ -54,6 +55,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
+      builder: EasyLoading.init(),
       initialRoute: LauncherPage.routeName,
       routes: {
         LauncherPage.routeName: (_) => LauncherPage(),
@@ -68,6 +70,7 @@ class MyApp extends StatelessWidget {
         SalesPage.routeName: (_) => SalesPage(),
         NewProductPage.routeName: (_) => NewProductPage(),
         Vat_DiscountPage.routeName: (_) => Vat_DiscountPage(),
+        TableNumberPage.routeName: (_) => TableNumberPage(),
         CustomizeProduct.routeName: (_) => CustomizeProduct(),
       },
     );

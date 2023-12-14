@@ -170,10 +170,11 @@ class RecentlyPlacedOrders extends StatelessWidget{
           SizedBox(
             width: double.infinity,
             child: DataTable(
-              decoration: BoxDecoration(
-                color: green
-              ),
-              columns: const [
+              headingRowColor: MaterialStateColor.resolveWith((states) => green),
+              // decoration: const BoxDecoration(
+              //   color: green
+              // ),
+              columns: const  [
                 DataColumn(
                     label: Text('Order ID',style: TextStyle(fontWeight: FontWeight.bold))
                 ),
@@ -190,7 +191,42 @@ class RecentlyPlacedOrders extends StatelessWidget{
                     label: Text('Price ',style: TextStyle(fontWeight: FontWeight.bold),)
                 ),
               ],
-              rows: [
+              rows: const[
+                DataRow(cells:[
+                  DataCell(Text('gILkv0lhNayRl73J60QL')),
+                  DataCell(Text('Mixed Chowmein')),
+                  DataCell(Text('Pending')),
+                  DataCell(Text('')),
+                  DataCell(Text('260')),
+                ]),
+                DataRow(cells:[
+                  DataCell(Text('0bUXUwFpyvJ8HOPL0YP8')),
+                  DataCell(Text('Classic Zinger Burger')),
+                  DataCell(Text('Processing')),
+                  DataCell(Text('')),
+                  DataCell(Text('320')),
+                ]),
+                DataRow(cells:[
+                  DataCell(Text('K5jmvw0fNdDHdKrTdhTp')),
+                  DataCell(Text('Chinese Masala Wrappo')),
+                  DataCell(Text('Processing')),
+                  DataCell(Text('')),
+                  DataCell(Text('220')),
+                ]),
+                DataRow(cells:[
+                  DataCell(Text('Cox9eIvYu6eFMVjSy1Dg')),
+                  DataCell(Text('Mexican Noodles')),
+                  DataCell(Text('Delivered')),
+                  DataCell(Text('')),
+                  DataCell(Text('330')),
+                ]),
+                DataRow(cells:[
+                  DataCell(Text('QL1zl9Nj4F0Y0k9pxhzd')),
+                  DataCell(Text('Chui Gosht - 1:5')),
+                  DataCell(Text('Delivered')),
+                  DataCell(Text('')),
+                  DataCell(Text('450')),
+                ]),
 
               ],
             ),
@@ -215,7 +251,7 @@ class TrendingOrders extends StatelessWidget {
       child: Column(
         children: [
           ListTile(
-            title: Text('TRENDING ORDERS',style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
+            title: Text('TRENDING ORDERS  (coming soon)',style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
           ),
           SizedBox(height: appPadding,),
           Responsive(
@@ -310,7 +346,34 @@ class RecentOrderRequested extends StatelessWidget {
                     label: Text('Product ID',style: TextStyle(fontWeight: FontWeight.bold),)
                 )
               ],
-              rows: [],
+              rows: const [
+                DataRow(cells: [
+                  DataCell(Text('Mixed Chowmein')),
+                  DataCell(Text('260')),
+                  DataCell(Text('0bUXUwFpyvJ8HOPL0YP8')),
+                ]),
+                DataRow(cells: [
+                  DataCell(Text('Classic Zinger Burger')),
+                  DataCell(Text('320')),
+                  DataCell(Text('K5jmvw0fNdDHdKrTdhTp')),
+                ]),
+                DataRow(cells: [
+                  DataCell(Text('Chinese Masala Wrappo')),
+                  DataCell(Text('220')),
+                  DataCell(Text('QL1zl9Nj4F0Y0k9pxhzd')),
+                ]),
+                DataRow(cells: [
+                  DataCell(Text('Mexican Noodles')),
+                  DataCell(Text('330')),
+                  DataCell(Text('gILkv0lhNayRl73J60QL')),
+                ]),
+
+                DataRow(cells: [
+                  DataCell(Text('Chui Gosht - 1:5')),
+                  DataCell(Text('450')),
+                  DataCell(Text('Cox9eIvYu6eFMVjSy1Dg')),
+                ]),
+              ],
             ),
           )
         ],

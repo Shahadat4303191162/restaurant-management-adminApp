@@ -3,6 +3,7 @@ import 'package:cafe_admin/page/launcher_page.dart';
 import 'package:cafe_admin/src/features/login/presentation/widgets/password_input_field.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 import '../widgets/user_id_input_field.dart';
 
@@ -89,7 +90,9 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void authenticate() async {
+
     if (formKey.currentState!.validate()) {
+      EasyLoading.show(status: 'Loading...',dismissOnTap: false);
       // try{
       //   AuthService.login(emailController.text, passController.text).then((login) =>
       //       Navigator.pushReplacementNamed(context, LauncherPage.routeName));
@@ -101,11 +104,10 @@ class _LoginPageState extends State<LoginPage> {
         final status =
             await AuthService.login(emailController.text, passController.text);
         if (status) {
-          print('mounted e jai kaj atke geche');
+          EasyLoading.dismiss();
           if (!mounted) return;
-          print('all ok');
           Navigator.pushReplacementNamed(context, LauncherPage.routeName);
-          print('Launcher page e pathanu holo');
+
         } else {
           await AuthService.logOut();
           setState(() {
@@ -113,6 +115,7 @@ class _LoginPageState extends State<LoginPage> {
           });
         }
       } on FirebaseAuthException catch (e) {
+        EasyLoading.dismiss();
         setState(() {
           errMsg = e.message!;
         });

@@ -118,7 +118,8 @@ class _Vat_DiscountPageState extends State<Vat_DiscountPage> {
     );
   }
 
-  void _checkUpdate() {
+  void
+  _checkUpdate() {
     needUpdate = orderProvider.orderConstantsModel.discount.toDouble() !=
         discountslidervalue || orderProvider.orderConstantsModel.vat.toDouble() !=
         vatslidervalue;

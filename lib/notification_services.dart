@@ -53,7 +53,7 @@ class NotificationServices {
   //   NotificationSettings settings = await messaging.requestPermission(
   //     alert: true,
   //     announcement: true,
-  //     badge: true,
+  //     badge: true,1
   //     carPlay: true,
   //     criticalAlert: true,
   //     provisional: true,
