@@ -64,9 +64,9 @@ class ProductModel{
         longDescription: map[productLongDescription],
         stock: map[productStock],
         salesPrice: map [productSalesPrice],
-        ratingCount: map[productRatingCount],
+        ratingCount: map[productRatingCount] ?? 0,
         productDiscount: map[productPriceDiscount],
-        rating: map[productRating],
+        rating: map[productRating] ?? 0.0,
         featured: map[productFeatured],
         available: map[productAvailable],
 

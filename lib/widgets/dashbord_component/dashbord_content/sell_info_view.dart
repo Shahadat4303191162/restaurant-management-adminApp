@@ -1,7 +1,7 @@
 import 'package:cafe_admin/utils/constants.dart';
 import 'package:flutter/material.dart';
 
-import '../../models/sell_info_dashboard_content_model.dart';
+import '../../../models/sell_info_dashboard_content_model.dart';
 
 class SellInfoView extends StatelessWidget {
 

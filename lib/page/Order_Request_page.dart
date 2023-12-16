@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-class SalesPage extends StatelessWidget {
+class OrderRequestPage extends StatelessWidget {
   static const String routeName = '/salesPage';
-  const SalesPage({super.key});
+  const OrderRequestPage({super.key});
 
   @override
   Widget build(BuildContext context) {

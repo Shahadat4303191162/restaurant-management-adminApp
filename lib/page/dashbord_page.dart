@@ -4,20 +4,22 @@ import 'package:cafe_admin/page/category_page.dart';
 import 'package:cafe_admin/page/order_list_page.dart';
 import 'package:cafe_admin/page/product_page.dart';
 import 'package:cafe_admin/page/report_page.dart';
-import 'package:cafe_admin/page/sales_page.dart';
+import 'package:cafe_admin/page/Order_Request_page.dart';
 import 'package:cafe_admin/page/settings_page.dart';
 import 'package:cafe_admin/page/table_number_page.dart';
+import 'package:cafe_admin/provider/order_provider.dart';
 import 'package:cafe_admin/utils/constants.dart';
 import 'package:cafe_admin/utils/controller.dart';
-import 'package:cafe_admin/page/dashboard_content.dart';
+import 'package:cafe_admin/widgets/dashbord_component/dashboard_content.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../widgets/dashbord_component/drawer_list_tile_view.dart';
-import '../widgets/dashbord_component/header.dart';
+import '../widgets/dashbord_component/dashbord_content/drawer_list_tile_view.dart';
+import '../widgets/dashbord_component/dashbord_content/header.dart';
 import '../provider/product_provider.dart';
 import '../widgets/responsive.dart';
 import 'Vat_discount_page.dart';
 import 'new_product_page.dart';
+import 'order_page.dart';
 
 class DashboardPage extends StatefulWidget {
   static const String routeName = '/dashboard';
@@ -51,6 +53,8 @@ class _DashboardPageState extends State<DashboardPage> {
     Provider.of<ProductProvider>(context, listen: false).getAllCategories();
     Provider.of<ProductProvider>(context,listen: false).getAllTableValue();
     Provider.of<ProductProvider>(context, listen: false).getAllProducts();
+    Provider.of<OrderProvider>(context,listen: false).getAllOrders();
+    Provider.of<OrderProvider>(context,listen: false).getAllOrderRequest();
     return Scaffold(
 
       backgroundColor: bgColor,
@@ -125,7 +129,7 @@ class _DashboardPageState extends State<DashboardPage> {
       case DrawerListTileModel.dashBoard:
         return DashboardContent(); // Replace with your DashboardPage widget
       case DrawerListTileModel.order:
-        return OrderPage(); // Replace with your OrderPage widget
+        return OrderListPage(); // Replace with your OrderPage widget
       case DrawerListTileModel.product_list:
         return ProductPage(); // Replace with your ProductPage widget
       case DrawerListTileModel.category:
@@ -133,7 +137,7 @@ class _DashboardPageState extends State<DashboardPage> {
       case DrawerListTileModel.addMenu:
         return NewProductPage();// Replace with your CategoryPage widget
       case DrawerListTileModel.sales:
-        return SalesPage(); // Replace with your SalesPage widget
+        return OrderPage(); // Replace with your SalesPage widget
       case DrawerListTileModel.setting:
         return SettingsPage();
       case DrawerListTileModel.vatDiscount:
@@ -155,7 +159,7 @@ class _DashboardPageState extends State<DashboardPage> {
         route = DashboardPage.routeName;
         break;
       case DrawerListTileModel.order :
-        route = OrderPage.routeName;
+        route = OrderListPage.routeName;
         break;
       case DrawerListTileModel.product_list :
         route = ProductPage.routeName;
@@ -167,7 +171,7 @@ class _DashboardPageState extends State<DashboardPage> {
         route = NewProductPage.routeName;
         break;
       case DrawerListTileModel.sales :
-        route = SalesPage.routeName;
+        route = OrderPage.routeName;
         break;
       case DrawerListTileModel.setting :
         route = SettingsPage.routeName;

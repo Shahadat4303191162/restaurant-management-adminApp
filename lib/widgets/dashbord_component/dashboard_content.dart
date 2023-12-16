@@ -1,13 +1,13 @@
 import 'package:cafe_admin/utils/constants.dart';
-import 'package:cafe_admin/widgets/dashbord_component/sell_info_view.dart';
+import 'package:cafe_admin/widgets/dashbord_component/dashbord_content/sell_info_view.dart';
 import 'package:flutter/material.dart';
 
-import '../models/dashboard_monthly_rev_model.dart';
-import '../models/sell_info_dashboard_content_model.dart';
-import '../models/trending_order_card_model.dart';
-import '../widgets/dashbord_component/dashbaord_monthly_rev_view.dart';
-import '../widgets/dashbord_component/trending_order_grid_View.dart';
-import '../widgets/responsive.dart';
+import '../../models/dashboard_monthly_rev_model.dart';
+import '../../models/sell_info_dashboard_content_model.dart';
+import '../../models/trending_order_card_model.dart';
+import 'dashbord_content/dashbaord_monthly_rev_view.dart';
+import 'dashbord_content/trending_order_grid_View.dart';
+import '../responsive.dart';
 
 class DashboardContent extends StatelessWidget {
   const DashboardContent({super.key});

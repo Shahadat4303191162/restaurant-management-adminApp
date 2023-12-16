@@ -17,6 +17,11 @@ class DbHelper{
   static const String collectionUsers = 'Users';
   static const String documentOrderConstant = 'orderConstant';
   static const String collectionDiversSelection = 'Size Variation';
+  static const String collectionCart = 'Cart';
+  static const String collectionOrder = 'Order';
+  static const String collectionOrderRequest = 'OrderRequest';
+  static const String collectionOrderDetails = 'OrderDetails';
+
   static final FirebaseFirestore _db = FirebaseFirestore.instance;
 
   static Future<bool> isAdmin(String uid) async{
@@ -84,6 +89,15 @@ class DbHelper{
 
   static Stream<QuerySnapshot<Map<String,dynamic>>> getAllProducts()=>
       _db.collection(collectionProduct).snapshots();
+
+  static Stream<QuerySnapshot<Map<String,dynamic>>> getAllOrder()=>
+      _db.collection(collectionOrder).snapshots();
+
+  static Stream<QuerySnapshot<Map<String,dynamic>>> getAllOrderRequest(String uid)=>
+      _db.collection(collectionUsers)
+          .doc(uid)
+          .collection(collectionOrderRequest)
+          .snapshots();
 
   static Stream<DocumentSnapshot<Map<String,dynamic>>> getOrderConstants()=>
       _db.collection(collectionSettings).doc(documentOrderConstant).snapshots();

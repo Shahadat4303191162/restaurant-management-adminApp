@@ -1,7 +1,8 @@
 import 'package:cafe_admin/utils/constants.dart';
 import 'package:flutter/material.dart';
 
-import '../../models/dashboard_monthly_rev_model.dart';
+import '../../../models/dashboard_monthly_rev_model.dart';
+
 
 class DashboardMonthlyRevView extends StatelessWidget {
   const DashboardMonthlyRevView({super.key, required this.info});

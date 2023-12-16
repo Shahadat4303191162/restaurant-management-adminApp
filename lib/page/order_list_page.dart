@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 
-class OrderPage extends StatelessWidget {
-  static const String routeName = '/order';
-  const OrderPage({super.key});
+class OrderListPage extends StatelessWidget {
+  static const String routeName = '/orderList';
+  const OrderListPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold();
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Order List'),
+      ),
+    );
   }
 }

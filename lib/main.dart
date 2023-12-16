@@ -5,18 +5,19 @@ import 'package:cafe_admin/page/category_page.dart';
 import 'package:cafe_admin/page/coustomizable_product.dart';
 import 'package:cafe_admin/page/dashbord_page.dart';
 import 'package:cafe_admin/page/launcher_page.dart';
+import 'package:cafe_admin/page/order_page.dart';
 import 'package:cafe_admin/page/table_number_page.dart';
 import 'package:cafe_admin/src/features/login/presentation/page/login_page.dart';
 import 'package:cafe_admin/page/new_product_page.dart';
 import 'package:cafe_admin/page/order_list_page.dart';
 import 'package:cafe_admin/page/product_details_page.dart';
 import 'package:cafe_admin/page/product_page.dart';
-import 'package:cafe_admin/page/sales_page.dart';
+import 'package:cafe_admin/page/Order_Request_page.dart';
 import 'package:cafe_admin/page/settings_page.dart';
 import 'package:cafe_admin/provider/order_provider.dart';
 import 'package:cafe_admin/provider/product_provider.dart';
 import 'package:cafe_admin/utils/controller.dart';
-import 'package:cafe_admin/page/dashboard_content.dart';
+import 'package:cafe_admin/widgets/dashbord_component/dashboard_content.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -66,8 +67,9 @@ class MyApp extends StatelessWidget {
         ProductDetailsPage.routeName: (_) => const ProductDetailsPage(),
         CategoryPage.routeName: (_) => CategoryPage(),
         SettingsPage.routeName: (_) => SettingsPage(),
-        OrderPage.routeName: (_) => OrderPage(),
-        SalesPage.routeName: (_) => SalesPage(),
+        OrderListPage.routeName: (_) => OrderListPage(),
+        OrderPage.routeName:(_) => OrderPage(),
+        OrderRequestPage.routeName: (_) => OrderRequestPage(),
         NewProductPage.routeName: (_) => NewProductPage(),
         Vat_DiscountPage.routeName: (_) => Vat_DiscountPage(),
         TableNumberPage.routeName: (_) => TableNumberPage(),

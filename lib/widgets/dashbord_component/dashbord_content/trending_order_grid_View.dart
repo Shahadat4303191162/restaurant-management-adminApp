@@ -1,7 +1,8 @@
 import 'package:cafe_admin/utils/constants.dart';
 import 'package:flutter/material.dart';
 
-import '../../models/trending_order_card_model.dart';
+import '../../../models/trending_order_card_model.dart';
+
 
 class TrendingOrderView extends StatelessWidget {
   final TrendingOrderDashboardContentModel item;
