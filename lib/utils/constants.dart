@@ -20,3 +20,8 @@ const red = Colors.red;
 // Default App Padding
 const appPadding = 16.0;
 
+enum OrderFilter{
+  TODAY,YESTERDAY,SEVER_DAYS, THIS_MONTH,THREE_MONTH,THIS_YEAR,ALL_TIME;
+}
+
+

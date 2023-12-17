@@ -1,10 +1,15 @@
+import 'package:cafe_admin/provider/order_provider.dart';
 import 'package:cafe_admin/utils/constants.dart';
 import 'package:cafe_admin/widgets/dashbord_component/dashbord_content/sell_info_view.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 import '../../models/dashboard_monthly_rev_model.dart';
 import '../../models/sell_info_dashboard_content_model.dart';
 import '../../models/trending_order_card_model.dart';
+import '../../page/order_details_page.dart';
+import '../../page/order_list_page.dart';
 import 'dashbord_content/dashbaord_monthly_rev_view.dart';
 import 'dashbord_content/trending_order_grid_View.dart';
 import '../responsive.dart';
@@ -148,6 +153,9 @@ class Rating extends StatelessWidget{
 class RecentlyPlacedOrders extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
+    final orderList = Provider.of<OrderProvider>(context,listen: false).getFilteredListForDashbord();
+    orderList.sort((orderM1,orderM2) => orderM2.paymentDate.timestamp.compareTo(orderM1.paymentDate.timestamp));
+
     return Container(
       padding: const EdgeInsets.all(appPadding),
       decoration: const BoxDecoration(
@@ -159,7 +167,10 @@ class RecentlyPlacedOrders extends StatelessWidget{
           ListTile(
             title: Text('RECENTLY PLACED ORDERS',style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
             trailing: ElevatedButton(
-              onPressed: () {  },
+              onPressed: () => Navigator.pushNamed(
+                  context,
+                  OrderListPage.routeName,
+                  arguments: OrderFilter.ALL_TIME),
               style: ElevatedButton.styleFrom(
                   backgroundColor: dark
               ),
@@ -171,64 +182,50 @@ class RecentlyPlacedOrders extends StatelessWidget{
             width: double.infinity,
             child: DataTable(
               headingRowColor: MaterialStateColor.resolveWith((states) => green),
-              // decoration: const BoxDecoration(
-              //   color: green
-              // ),
               columns: const  [
                 DataColumn(
-                    label: Text('Order ID',style: TextStyle(fontWeight: FontWeight.bold))
+                    label: Text('Order Time',style: TextStyle(fontWeight: FontWeight.bold))
                 ),
                 DataColumn(
-                    label: Text('Product Name',style: TextStyle(fontWeight: FontWeight.bold))
+                    label: Text('Order Id',style: TextStyle(fontWeight: FontWeight.bold))
                 ),
                 DataColumn(
-                    label: Text('Order Status ',style: TextStyle(fontWeight: FontWeight.bold),)
-                ),
-                DataColumn(
-                    label: Text('Delivered Time ',style: TextStyle(fontWeight: FontWeight.bold),)
+                    label: Text('Payment Method ',style: TextStyle(fontWeight: FontWeight.bold),)
                 ),
                 DataColumn(
                     label: Text('Price ',style: TextStyle(fontWeight: FontWeight.bold),)
                 ),
               ],
-              rows: const[
-                DataRow(cells:[
-                  DataCell(Text('gILkv0lhNayRl73J60QL')),
-                  DataCell(Text('Mixed Chowmein')),
-                  DataCell(Text('Pending')),
-                  DataCell(Text('')),
-                  DataCell(Text('260')),
-                ]),
-                DataRow(cells:[
-                  DataCell(Text('0bUXUwFpyvJ8HOPL0YP8')),
-                  DataCell(Text('Classic Zinger Burger')),
-                  DataCell(Text('Processing')),
-                  DataCell(Text('')),
-                  DataCell(Text('320')),
-                ]),
-                DataRow(cells:[
-                  DataCell(Text('K5jmvw0fNdDHdKrTdhTp')),
-                  DataCell(Text('Chinese Masala Wrappo')),
-                  DataCell(Text('Processing')),
-                  DataCell(Text('')),
-                  DataCell(Text('220')),
-                ]),
-                DataRow(cells:[
-                  DataCell(Text('Cox9eIvYu6eFMVjSy1Dg')),
-                  DataCell(Text('Mexican Noodles')),
-                  DataCell(Text('Delivered')),
-                  DataCell(Text('')),
-                  DataCell(Text('330')),
-                ]),
-                DataRow(cells:[
-                  DataCell(Text('QL1zl9Nj4F0Y0k9pxhzd')),
-                  DataCell(Text('Chui Gosht - 1:5')),
-                  DataCell(Text('Delivered')),
-                  DataCell(Text('')),
-                  DataCell(Text('450')),
-                ]),
+              rows: List.generate(orderList.length > 5? 5: orderList.length, (index) =>
+                  DataRow(cells: [
+                    DataCell(
+                      Text(
+                        DateFormat('dd/MM/yyyy hh:mm:ss a').format(orderList[index].paymentDate.timestamp.toDate()),
+                      ),
+                        onTap:(){
+                          Navigator.pushNamed(context, OrderDetailsPage.routeName,arguments: orderList[index]);
+                        }
+                    ),
+                    DataCell(
+                        Text(orderList[index].paymentId!),
+                        onTap:(){
+                          Navigator.pushNamed(context, OrderDetailsPage.routeName,arguments: orderList[index]);
+                        }
+                    ),
+                    DataCell(
+                        Text(orderList[index].paymentMethod),
+                        onTap:(){
+                          Navigator.pushNamed(context, OrderDetailsPage.routeName,arguments: orderList[index]);
+                        }
+                    ),
+                    DataCell(
+                        Text(orderList[index].grandTotal.toString()),
+                        onTap:(){
+                          Navigator.pushNamed(context, OrderDetailsPage.routeName,arguments: orderList[index]);
+                        }
+                    ),
+                  ])),
 
-              ],
             ),
           )
         ],

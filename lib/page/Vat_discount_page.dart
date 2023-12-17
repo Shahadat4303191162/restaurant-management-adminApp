@@ -37,6 +37,7 @@ class _Vat_DiscountPageState extends State<Vat_DiscountPage> {
     final double screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         title: const Text('Vat & discount'),
       ),
       body: Padding(

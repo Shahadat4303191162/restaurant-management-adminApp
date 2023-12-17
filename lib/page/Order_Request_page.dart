@@ -8,7 +8,8 @@ class OrderRequestPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Sales'),
+        centerTitle: true,
+        title: const Text('Order Request List'),
       ),
     );
   }

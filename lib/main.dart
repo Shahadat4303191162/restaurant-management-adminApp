@@ -5,6 +5,7 @@ import 'package:cafe_admin/page/category_page.dart';
 import 'package:cafe_admin/page/coustomizable_product.dart';
 import 'package:cafe_admin/page/dashbord_page.dart';
 import 'package:cafe_admin/page/launcher_page.dart';
+import 'package:cafe_admin/page/order_details_page.dart';
 import 'package:cafe_admin/page/order_page.dart';
 import 'package:cafe_admin/page/table_number_page.dart';
 import 'package:cafe_admin/src/features/login/presentation/page/login_page.dart';
@@ -68,6 +69,7 @@ class MyApp extends StatelessWidget {
         CategoryPage.routeName: (_) => CategoryPage(),
         SettingsPage.routeName: (_) => SettingsPage(),
         OrderListPage.routeName: (_) => OrderListPage(),
+        OrderDetailsPage.routeName: (_) => OrderDetailsPage(),
         OrderPage.routeName:(_) => OrderPage(),
         OrderRequestPage.routeName: (_) => OrderRequestPage(),
         NewProductPage.routeName: (_) => NewProductPage(),

@@ -18,7 +18,7 @@ class DrawerListTileModel{
   static const String choiceGroup = 'Choice Group';
   static const String dashBoard = 'Dashboard';
   static const String category = 'Category';
-  static const String order = 'Order';
+  static const String order = 'Order Request';
   static const String sales = 'Sales';
   static const String setting = 'Setting';
   static const String vatDiscount = 'Vat_Discount';

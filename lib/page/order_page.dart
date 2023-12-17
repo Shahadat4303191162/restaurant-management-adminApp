@@ -13,6 +13,7 @@ class OrderPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         title: const Text('Orders'),
       ),
       body: Consumer<OrderProvider>(
@@ -36,16 +37,16 @@ class OrderPage extends StatelessWidget {
                           children: [
                             Column(
                               children: [
-                                const Text ('Total Order'),
-                                const SizedBox(height: 5,),
-                                //Text('${provider.getFilteredListBySingleDay(DateTime.now()).length}',style: Theme.of(context).textTheme.headline5)
+                                Text ('Total Order'),
+                                SizedBox(height: 5,),
+                                Text('${provider.getFilteredListBySingleDay(DateTime.now()).length}',style: Theme.of(context).textTheme.titleMedium)
                               ],
                             ),
                             Column(
                               children: [
-                                const Text ('Total Sell'),
-                                const SizedBox(height: 5,),
-                                // Text('$currencysymbol ${provider.getTotalSaleBySingleDate(DateTime.now())}',style: Theme.of(context).textTheme.headline5)
+                                Text ('Total Sell'),
+                                SizedBox(height: 5,),
+                                Text('$currencysymbol ${provider.getTotalSaleBySingleDate(DateTime.now())}',style: Theme.of(context).textTheme.titleMedium)
                               ],
                             ),
                           ],
@@ -55,7 +56,7 @@ class OrderPage extends StatelessWidget {
                               Navigator.pushNamed(
                                 context,
                                 OrderListPage.routeName,
-                                // arguments: OrderFilter.TODAY,
+                                arguments: OrderFilter.TODAY,
                               ),
                           child: const Text('View All'),
                         ),
@@ -81,18 +82,18 @@ class OrderPage extends StatelessWidget {
                                 children: [
                                   const Text ('Total Order'),
                                   const SizedBox(height: 5,),
-                                  // Text('${provider
-                                  //     .getFilteredListBySingleDay(DateTime.now()
-                                  //     .subtract(const Duration(days: 1))).length}',
-                                  //   style: Theme.of(context).textTheme.headline5,)
+                                  Text('${provider
+                                      .getFilteredListBySingleDay(DateTime.now()
+                                      .subtract(const Duration(days: 1))).length}',
+                                    style: Theme.of(context).textTheme.titleMedium,)
                                 ],
                               ),
                               Column(
                                 children: [
                                   const Text ('Total Sell'),
                                   const SizedBox(height: 5,),
-                                  // Text('$currencysymbol ${provider.getTotalSaleBySingleDate(DateTime.now().subtract(const Duration(days: 1)))}',
-                                  //     style: Theme.of(context).textTheme.headline5)
+                                  Text('$currencysymbol ${provider.getTotalSaleBySingleDate(DateTime.now().subtract(const Duration(days: 1)))}',
+                                      style: Theme.of(context).textTheme.titleMedium)
                                 ],
                               ),
                             ],
@@ -102,7 +103,7 @@ class OrderPage extends StatelessWidget {
                                 Navigator.pushNamed(
                                   context,
                                   OrderListPage.routeName,
-                                  // arguments: OrderFilter.YESTERDAY,
+                                  arguments: OrderFilter.YESTERDAY,
                                 ),
                             child: const Text('View All'),
                           ),
@@ -134,15 +135,17 @@ class OrderPage extends StatelessWidget {
                               children: [
                                 const Text ('Total Order'),
                                 const SizedBox(height: 5,),
-                                //Text('${provider.getFilteredListBySingleDay(DateTime.now()).length}',style: Theme.of(context).textTheme.headline5)
-                              ],
+                                Text('${provider.getFilteredListByWeek(
+                                    DateTime.now().subtract(const Duration(days: 7))).length}',
+                                    style: Theme.of(context).textTheme.titleMedium)                              ],
                             ),
                             Column(
                               children: [
                                 const Text ('Total Sell'),
                                 const SizedBox(height: 5,),
-                                // Text('$currencysymbol ${provider.getTotalSaleBySingleDate(DateTime.now())}',style: Theme.of(context).textTheme.headline5)
-                              ],
+                                Text('$currencysymbol ${provider.getTotalSaleByWeek(
+                                    DateTime.now().subtract(const Duration(days: 7)))}',
+                                    style: Theme.of(context).textTheme.titleMedium)                              ],
                             ),
                           ],
                         ),
@@ -151,7 +154,7 @@ class OrderPage extends StatelessWidget {
                               Navigator.pushNamed(
                                 context,
                                 OrderListPage.routeName,
-                                // arguments: OrderFilter.TODAY,
+                                arguments: OrderFilter.SEVER_DAYS,
                               ),
                           child: const Text('View All'),
                         ),
@@ -177,18 +180,16 @@ class OrderPage extends StatelessWidget {
                                 children: [
                                   const Text ('Total Order'),
                                   const SizedBox(height: 5,),
-                                  // Text('${provider
-                                  //     .getFilteredListBySingleDay(DateTime.now()
-                                  //     .subtract(const Duration(days: 1))).length}',
-                                  //   style: Theme.of(context).textTheme.headline5,)
+                                  Text('${provider.getFilteredListByMonth(DateTime.now()).length}',
+                                      style: Theme.of(context).textTheme.titleMedium)
                                 ],
                               ),
                               Column(
                                 children: [
                                   const Text ('Total Sell'),
                                   const SizedBox(height: 5,),
-                                  // Text('$currencysymbol ${provider.getTotalSaleBySingleDate(DateTime.now().subtract(const Duration(days: 1)))}',
-                                  //     style: Theme.of(context).textTheme.headline5)
+                                  Text('$currencysymbol ${provider.getTotalSaleByMonth(DateTime.now())}',
+                                      style: Theme.of(context).textTheme.titleMedium)
                                 ],
                               ),
                             ],
@@ -198,7 +199,7 @@ class OrderPage extends StatelessWidget {
                                 Navigator.pushNamed(
                                   context,
                                   OrderListPage.routeName,
-                                  // arguments: OrderFilter.YESTERDAY,
+                                  arguments: OrderFilter.THIS_MONTH,
                                 ),
                             child: const Text('View All'),
                           ),
@@ -230,15 +231,17 @@ class OrderPage extends StatelessWidget {
                               children: [
                                 const Text ('Total Order'),
                                 const SizedBox(height: 5,),
-                                //Text('${provider.getFilteredListBySingleDay(DateTime.now()).length}',style: Theme.of(context).textTheme.headline5)
-                              ],
+                                Text('${provider.getFilteredListByWeek(
+                                    DateTime.now().subtract(const Duration(days: 90))).length}',
+                                    style: Theme.of(context).textTheme.titleMedium)                                ],
                             ),
                             Column(
                               children: [
                                 const Text ('Total Sell'),
                                 const SizedBox(height: 5,),
-                                // Text('$currencysymbol ${provider.getTotalSaleBySingleDate(DateTime.now())}',style: Theme.of(context).textTheme.headline5)
-                              ],
+                                Text('$currencysymbol ${provider.getTotalSaleByWeek(
+                                    DateTime.now().subtract(const Duration(days: 90)))}',
+                                    style: Theme.of(context).textTheme.titleMedium)                               ],
                             ),
                           ],
                         ),
@@ -247,7 +250,7 @@ class OrderPage extends StatelessWidget {
                               Navigator.pushNamed(
                                 context,
                                 OrderListPage.routeName,
-                                // arguments: OrderFilter.TODAY,
+                                arguments: OrderFilter.THREE_MONTH,
                               ),
                           child: const Text('View All'),
                         ),
@@ -273,18 +276,16 @@ class OrderPage extends StatelessWidget {
                                 children: [
                                   const Text ('Total Order'),
                                   const SizedBox(height: 5,),
-                                  // Text('${provider
-                                  //     .getFilteredListBySingleDay(DateTime.now()
-                                  //     .subtract(const Duration(days: 1))).length}',
-                                  //   style: Theme.of(context).textTheme.headline5,)
+                                  Text('${provider.getFilteredListByYear(DateTime.now()).length}',
+                                      style: Theme.of(context).textTheme.titleMedium)
                                 ],
                               ),
                               Column(
                                 children: [
                                   const Text ('Total Sell'),
                                   const SizedBox(height: 5,),
-                                  // Text('$currencysymbol ${provider.getTotalSaleBySingleDate(DateTime.now().subtract(const Duration(days: 1)))}',
-                                  //     style: Theme.of(context).textTheme.headline5)
+                                  Text('$currencysymbol ${provider.getTotalSaleByYear(DateTime.now())}',
+                                      style: Theme.of(context).textTheme.titleMedium)
                                 ],
                               ),
                             ],
@@ -294,7 +295,7 @@ class OrderPage extends StatelessWidget {
                                 Navigator.pushNamed(
                                   context,
                                   OrderListPage.routeName,
-                                  // arguments: OrderFilter.YESTERDAY,
+                                  arguments: OrderFilter.THIS_YEAR,
                                 ),
                             child: const Text('View All'),
                           ),
@@ -303,6 +304,51 @@ class OrderPage extends StatelessWidget {
                   ),
                 ),
               ],
+            ),
+            SizedBox(
+              height: 30,
+            ),
+            Card(
+                elevation: 5,
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                child: Column(
+                  children: [
+                    Text('All Time',style: Theme.of(context).textTheme.titleLarge,),
+                    const SizedBox(height: 5,),
+                    const Divider(height: 2,color: Colors.black),
+                    const SizedBox(height: 5,),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Column(
+                          children: [
+                            const Text ('Total Order'),
+                            const SizedBox(height: 5,),
+                            Text('${provider.orderPaymentList.length}',
+                                style: Theme.of(context).textTheme.titleMedium)
+                          ],
+                        ),
+                        Column(
+                          children: [
+                            const Text ('Total Sell'),
+                            const SizedBox(height: 5,),
+                            Text('$currencysymbol ${provider.getTotalSale()}',
+                                style: Theme.of(context).textTheme.titleMedium)
+                          ],
+                        ),
+                      ],
+                    ),
+                    TextButton(
+                      onPressed: () =>
+                          Navigator.pushNamed(
+                            context,
+                            OrderListPage.routeName,
+                            arguments: OrderFilter.ALL_TIME,
+                          ),
+                      child: const Text('View All'),
+                    ),
+                  ],
+                )
             ),
           ],
         ),
